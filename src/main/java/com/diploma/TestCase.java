@@ -4,6 +4,7 @@ import org.jblas.DoubleMatrix;
 import org.jblas.Solve;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 
@@ -38,45 +39,69 @@ public class TestCase {
 
 
     //Fill coefficients sum of the left part
-    private List<Double> fillSumCoefficientsLP() {
+    private List<Double> fillSumCoefficientsLP(final int NUMBER_OF_EQUATIONS) {
         List<Double> resultList = new ArrayList<Double>();
-        for (int i = 0; i < points.size(); i++) {
+        for (int i = 0; i < 2 * NUMBER_OF_EQUATIONS - 1; i++) {
             resultList.add(calculateSumCoefficientsLP(points, i, points.size()));
         }
         return resultList;
     }
 
     //Fill coefficients sum of the right part
-    private List<Double> fillSumCoefficientsRP() {
+    private List<Double> fillSumCoefficientsRP(final int NUMBER_OF_EQUATIONS) {
         List<Double> resultList = new ArrayList<Double>();
-        for (int i = 0; i <= (int) Math.sqrt(fillSumCoefficientsLP().size()); i++) {
+        for (int i = 0; i < NUMBER_OF_EQUATIONS; i++) {
             resultList.add(calculateSumCoefficientsRP(points, i, points.size()));
         }
         return resultList;
     }
 
     //3 in loop is number of equations
-    private double[][] fillLeftPartMatrix() {
-        double[][] result = new double[3][3];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                result[i][j] = fillSumCoefficientsLP().get(i + j);
+    private double[][] fillLeftPartMatrix(final int NUMBER_OF_EQUATIONS) {
+        double[][] result = new double[NUMBER_OF_EQUATIONS][NUMBER_OF_EQUATIONS];
+        for (int i = 0; i < NUMBER_OF_EQUATIONS; i++) {
+            for (int j = 0; j < NUMBER_OF_EQUATIONS; j++) {
+                result[i][j] = fillSumCoefficientsLP(NUMBER_OF_EQUATIONS).get(i + j);
             }
         }
         return result;
     }
 
     //Solving linear equations in matrix form: A*X=B
-    public DoubleMatrix solveLinearEquation() {
-        DoubleMatrix B = new DoubleMatrix(fillSumCoefficientsRP());
-        DoubleMatrix A = new DoubleMatrix(fillLeftPartMatrix());
+    public DoubleMatrix solveLinearEquation(final int NUMBER_OF_EQUATIONS) {
+        DoubleMatrix B = new DoubleMatrix(fillSumCoefficientsRP(NUMBER_OF_EQUATIONS));
+        DoubleMatrix A = new DoubleMatrix(fillLeftPartMatrix(NUMBER_OF_EQUATIONS));
 
         return Solve.solve(A, B);
     }
 
-    public double approximateFunction(double x) {
-        DoubleMatrix X = solveLinearEquation();
-        return X.get(0) + X.get(1) * x + X.get(2) * Math.pow(x, 2);
+    //Returns value of approximated function
+    public double approximateFunction(double x, final int NUMBER_OF_EQUATIONS) {
+        DoubleMatrix X = solveLinearEquation(NUMBER_OF_EQUATIONS);
+        double result = 0.0;
+        for (int i = 0; i < NUMBER_OF_EQUATIONS; i++) {
+            result += X.get(i) * Math.pow(x, i);
+        }
+        return result;
+    }
+
+    //Standard deviation for different exponents < maxExponent (loop condition)
+    public List<Double> standardDeviation(int maxExponent) {
+        List<Double> result = new ArrayList<Double>();
+        double standardDeviation;
+        for (int i = 1; i <= maxExponent; i++) {
+            standardDeviation = 0.0;
+            for (int j = 0; j < points.size(); j++) {
+                standardDeviation += Math.pow(approximateFunction(points.get(j).getX(), i) - points.get(j).getY(), 2);
+            }
+            result.add(Math.sqrt((1.0 / ((double)points.size() + 1.0)) * standardDeviation));
+        }
+        return result;
+    }
+
+    //Returns exponent that gives the most accuracy value of approximated function
+    public int bestExponent(List<Double> standardDeviationList) {
+        return standardDeviationList.indexOf(Collections.min(standardDeviationList));
     }
 
     public static void main(String[] args) {
@@ -89,9 +114,17 @@ public class TestCase {
 
         TestCase testCase = new TestCase(points);
 
-        System.out.println(testCase.solveLinearEquation());
+        System.out.println(testCase.solveLinearEquation(6));
 
-        System.out.println("\n\n" + testCase.approximateFunction(3.0));
+        System.out.println("\n\n" + testCase.approximateFunction(0.0, 6));
+
+        System.out.println();
+        for (Double d: testCase.standardDeviation(10)) {
+            System.out.println(d);
+        }
+
+        //The most accuracy function
+        System.out.println("\nFunction=" + testCase.solveLinearEquation(testCase.bestExponent(testCase.standardDeviation(10))));
 
     }
 
