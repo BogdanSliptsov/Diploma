@@ -9,12 +9,20 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
-        <!--Solving matrix-->
+        <!--Solving matrix for polynomial approximation-->
         <dependency>
             <groupId>org.jblas</groupId>
             <artifactId>jblas</artifactId>
             <version>1.2.4</version>
         </dependency>
+
+        <!-- Lagrange approximation-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.0</version>
+        </dependency>
+
 
     </dependencies>
 

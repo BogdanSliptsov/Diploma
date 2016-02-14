@@ -1,7 +1,7 @@
 package com.diploma.approximation;
 
 /**
- * Created by boubdyk on 09.02.2016.
+ * Created by bohdans on 2/10/2016.
  */
 public class Point {
     private Double x;

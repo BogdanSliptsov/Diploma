@@ -1,4 +1,4 @@
-package com.diploma;
+package com.diploma.approximation;
 
 import org.jblas.DoubleMatrix;
 import org.jblas.Solve;
@@ -6,16 +6,15 @@ import org.jblas.Solve;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
 
 /**
  * Created by bohdans on 2/10/2016.
  */
-public class TestCase {
+public class PolynomialApproximation {
     private List<Point> points;
     private List<Double> sumCoefficients;
 
-    public TestCase(List<Point> points) {
+    public PolynomialApproximation(List<Point> points) {
         this.points = points;
     }
 
@@ -102,30 +101,6 @@ public class TestCase {
     //Returns exponent that gives the most accuracy value of approximated function
     public int bestExponent(List<Double> standardDeviationList) {
         return standardDeviationList.indexOf(Collections.min(standardDeviationList));
-    }
-
-    public static void main(String[] args) {
-        List<Point> points = new ArrayList<Point>();
-        points.add(new Point(-3.0, -4.0));
-        points.add(new Point(-1.0, -0.8));
-        points.add(new Point(0.0, 1.6));
-        points.add(new Point(1.0, 2.3));
-        points.add(new Point(3.0, 1.5));
-
-        TestCase testCase = new TestCase(points);
-
-        System.out.println(testCase.solveLinearEquation(6));
-
-        System.out.println("\n\n" + testCase.approximateFunction(0.0, 6));
-
-        System.out.println();
-        for (Double d: testCase.standardDeviation(10)) {
-            System.out.println(d);
-        }
-
-        //The most accuracy function
-        System.out.println("\nFunction=" + testCase.solveLinearEquation(testCase.bestExponent(testCase.standardDeviation(10))));
-
     }
 
 }
