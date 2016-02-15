@@ -12,7 +12,6 @@ import java.util.List;
  */
 public class PolynomialApproximation {
     private List<Point> points;
-    private List<Double> sumCoefficients;
 
     public PolynomialApproximation(List<Point> points) {
         this.points = points;

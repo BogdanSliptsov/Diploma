@@ -22,7 +22,7 @@ public class Test {
         //The most accuracy function
         System.out.println("\nFunction=" + testCase.solveLinearEquation(testCase.bestExponent(testCase.standardDeviation(10))));
 
-        System.out.println("\n\n" + testCase.approximateFunction(0.0, testCase.bestExponent(testCase.standardDeviation(10))));
+        System.out.println("\n\n" + testCase.approximateFunction(3.0, testCase.bestExponent(testCase.standardDeviation(10))));
 
         System.out.println(testCase.solveLinearEquation(6));
     }
@@ -32,7 +32,7 @@ public class Test {
         ExponentialSmoothing exponentialSmoothing = new ExponentialSmoothing();
         List<Double> inputListForSmoothing = new ArrayList<Double>();
         for (int i = 0; i < points.size(); i++) {
-            inputListForSmoothing.add(testCase.approximateFunction(points.get(i).getX(), testCase.bestExponent(testCase.standardDeviation(10))));
+            inputListForSmoothing.add(points.get(i).getY());
         }
         for (Double d: exponentialSmoothing.smooth(inputListForSmoothing)) {
             System.out.println(d);
@@ -48,8 +48,8 @@ public class Test {
         points.add(new Point(1.0, 2.3));
         points.add(new Point(3.0, 1.5));
 
-//        testPolynomialApproximation(points);
-        testEponentialSmoothing(points);
+        testPolynomialApproximation(points);
+//        testEponentialSmoothing(points);
 
     }
 
