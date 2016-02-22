@@ -1,6 +1,10 @@
-package com.diploma.approximation;
+package com.diploma;
 
-import org.apache.commons.math3.analysis.polynomials.PolynomialFunctionLagrangeForm;
+import com.diploma.Point;
+import com.diploma.approximation.ExponentialSmoothing;
+import com.diploma.approximation.FourierSeries;
+import com.diploma.approximation.PolynomialApproximation;
+import com.diploma.interpolation.LagrangeInterpolation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +26,7 @@ public class Test {
         //The most accuracy function
 //        System.out.println("\nFunction=" + testCase.solveLinearEquation(testCase.bestExponent(testCase.standardDeviation(10))));
 
-        System.out.println("\n\n" + testCase.approximateFunction(4.0, 3));
+        System.out.println("\n\n" + testCase.approximateFunction(5.0, testCase.bestExponent(testCase.standardDeviation(10))));
 
 //        System.out.println(testCase.solveLinearEquation(6));
     }
@@ -45,6 +49,12 @@ public class Test {
         }
     }
 
+    public static void testLagrangeInterpolation(List<Point> points) {
+        LagrangeInterpolation testCase = new LagrangeInterpolation(points);
+
+        System.out.println(testCase.calculate(-1.5));
+    }
+
 
     public static void main(String[] args) {
         List<Point> points = new ArrayList<Point>();
@@ -56,8 +66,8 @@ public class Test {
 
 //        testPolynomialApproximation(points);
 //        testEponentialSmoothing(points);
-        testFourierSeries(points);
-
+//        testFourierSeries(points);
+        testLagrangeInterpolation(points);
     }
 
 }

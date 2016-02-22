@@ -1,5 +1,6 @@
 package com.diploma.approximation;
 
+import com.diploma.Point;
 import org.jblas.DoubleMatrix;
 import org.jblas.Solve;
 

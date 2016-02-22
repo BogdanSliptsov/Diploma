@@ -1,4 +1,4 @@
-package com.diploma.approximation;
+package com.diploma;
 
 /**
  * Created by bohdans on 2/10/2016.

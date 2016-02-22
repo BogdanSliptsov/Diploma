@@ -1,5 +1,7 @@
 package com.diploma.approximation;
 
+import com.diploma.Point;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
