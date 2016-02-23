@@ -24,5 +24,5 @@ public interface IDataAccessObject  <T, PK extends Serializable> {
     /**
      * Delete object from DataBase
      */
-    void delete(PK persistentObject);
+    void delete(PK persistentObjectID);
 }
