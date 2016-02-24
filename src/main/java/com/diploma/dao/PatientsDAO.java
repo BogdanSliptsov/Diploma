@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 /**
  * Created by boubdyk on 23.02.2016.
@@ -38,5 +40,11 @@ public class PatientsDAO implements IDataAccessObject<PatientsEntity, Long> {
     public void delete(Long persistentObjectID) {
         PatientsEntity patientsEntity = read(persistentObjectID);
         entityManager.remove(patientsEntity);
+    }
+
+    public List<PatientsEntity> getByDeseaseID(Long deseaseID) {
+        String query = "SELECT p FROM PatientsEntity p WHERE p.id_desease=\'" + deseaseID + "\'";
+        TypedQuery<PatientsEntity> result = entityManager.createQuery(query, PatientsEntity.class);
+        return result.getResultList();
     }
 }
