@@ -4,6 +4,7 @@ import sun.security.krb5.internal.crypto.Des;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by boubdyk on 22.02.2016.
@@ -20,6 +21,12 @@ public class DeseaseEntity implements Serializable {
 
     @Column(name = "desease_name")
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "deseaseEntity")
+    private List<ForecastEntity> forecastEntities;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "deseaseEntity")
+    private List<PatientsEntity> patientsEntities;
 
     public DeseaseEntity() {}
 
@@ -38,6 +45,24 @@ public class DeseaseEntity implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    public List<ForecastEntity> getForecastEntities() {
+        return forecastEntities;
+    }
+
+    public void setForecastEntities(List<ForecastEntity> forecastEntities) {
+        this.forecastEntities = forecastEntities;
+    }
+
+    public List<PatientsEntity> getPatientsEntities() {
+        return patientsEntities;
+    }
+
+    public void setPatientsEntities(List<PatientsEntity> patientsEntities) {
+        this.patientsEntities = patientsEntities;
+    }
+
+
 
     @Override
     public String toString() {

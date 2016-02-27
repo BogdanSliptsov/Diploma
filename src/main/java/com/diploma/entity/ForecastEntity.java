@@ -19,14 +19,17 @@ public class ForecastEntity implements Serializable {
     @Column(name = "number_of_patients")
     private Integer numberOfPatients;
 
-    @Column(name = "id_month")
-    private Long idMonth;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_desease")
+    private DeseaseEntity deseaseEntity;
 
-    @Column(name = "id_desease")
-    private Long idDesease;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_month")
+    private MonthsEntity monthsEntity;
 
-    @Column(name = "id_year")
-    private Long idYear;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_year")
+    private YearEntity yearEntity;
 
     public ForecastEntity() {}
 
@@ -46,29 +49,31 @@ public class ForecastEntity implements Serializable {
         this.numberOfPatients = numberOfPatients;
     }
 
-    public Long getIdMonth() {
-        return idMonth;
+    public DeseaseEntity getDeseaseEntity() {
+        return deseaseEntity;
     }
 
-    public void setIdMonth(Long idMonth) {
-        this.idMonth = idMonth;
+    public void setDeseaseEntity(DeseaseEntity deseaseEntity) {
+        this.deseaseEntity = deseaseEntity;
     }
 
-    public Long getIdDesease() {
-        return idDesease;
+    public MonthsEntity getMonthsEntity() {
+        return monthsEntity;
     }
 
-    public void setIdDesease(Long idDesease) {
-        this.idDesease = idDesease;
+    public void setMonthsEntity(MonthsEntity monthsEntity) {
+        this.monthsEntity = monthsEntity;
     }
 
-    public Long getIdYear() {
-        return idYear;
+    public YearEntity getYearEntity() {
+        return yearEntity;
     }
 
-    public void setIdYear(Long idYear) {
-        this.idYear = idYear;
+    public void setYearEntity(YearEntity yearEntity) {
+        this.yearEntity = yearEntity;
     }
+
+
 
     @Override
     public String toString() {
@@ -78,12 +83,12 @@ public class ForecastEntity implements Serializable {
                 .append(id)
                 .append(", numberOfPatients=")
                 .append(numberOfPatients)
-                .append(", idMonth=")
-                .append(idMonth)
-                .append(", idDesease=")
-                .append(idDesease)
-                .append(", idYear=")
-                .append(idYear)
+                .append(", monthsEntity=")
+                .append(monthsEntity)
+                .append(", deseaseEntity=")
+                .append(deseaseEntity)
+                .append(", yearEntity=")
+                .append(yearEntity)
                 .append("] ")
                 .toString();
     }

@@ -45,7 +45,7 @@ public class GeneralService {
         if (deseaseID == null) return null;
         Map<Long, Integer> map = new HashMap<>();
         for (PatientsEntity p: patientsDAO.getByDeseaseID(deseaseID)) {
-            map.put(p.getIdMonth(), p.getNumberOfPatients());
+            map.put(p.getMonthsEntity().getId(), p.getNumberOfPatients());
         }
         return map;
     }

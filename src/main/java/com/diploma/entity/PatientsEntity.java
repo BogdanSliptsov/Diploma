@@ -16,17 +16,20 @@ public class PatientsEntity implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "id_desease")
-    private Long idDesease;
-
-    @Column(name = "id_month")
-    private Long idMonth;
-
     @Column(name = "number_of_patients")
     private Integer numberOfPatients;
 
-    @Column(name = "id_year")
-    private Long idYear;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_year")
+    private YearEntity yearEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_month")
+    private MonthsEntity monthsEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_desease")
+    private DeseaseEntity deseaseEntity;
 
     public PatientsEntity() {}
 
@@ -38,20 +41,20 @@ public class PatientsEntity implements Serializable {
         this.id = id;
     }
 
-    public Long getIdDesease() {
-        return idDesease;
+    public MonthsEntity getMonthsEntity() {
+        return monthsEntity;
     }
 
-    public void setIdDesease(Long idDesease) {
-        this.idDesease = idDesease;
+    public void setMonthsEntity(MonthsEntity monthsEntity) {
+        this.monthsEntity = monthsEntity;
     }
 
-    public Long getIdMonth() {
-        return idMonth;
+    public DeseaseEntity getDeseaseEntity() {
+        return deseaseEntity;
     }
 
-    public void setIdMonth(Long idMonth) {
-        this.idMonth = idMonth;
+    public void setDeseaseEntity(DeseaseEntity deseaseEntity) {
+        this.deseaseEntity = deseaseEntity;
     }
 
     public Integer getNumberOfPatients() {
@@ -62,28 +65,30 @@ public class PatientsEntity implements Serializable {
         this.numberOfPatients = numberOfPatients;
     }
 
-    public Long getIdYear() {
-        return idYear;
+    public YearEntity getYearEntity() {
+        return yearEntity;
     }
 
-    public void setIdYear(Long idYear) {
-        this.idYear = idYear;
+    public void setYearEntity(YearEntity yearEntity) {
+        this.yearEntity = yearEntity;
     }
+
+
 
     @Override
     public String toString() {
         return new StringBuilder()
-                .append("ForecastEntity[")
+                .append("PatientsEntity[")
                 .append("id=")
                 .append(id)
                 .append(", numberOfPatients=")
                 .append(numberOfPatients)
-                .append(", idMonth=")
-                .append(idMonth)
-                .append(", idDesease=")
-                .append(idDesease)
-                .append(", idYear=")
-                .append(idYear)
+                .append(", monthsEntity=")
+                .append(monthsEntity)
+                .append(", deseaseEntity=")
+                .append(deseaseEntity)
+                .append(", yearEntity=")
+                .append(yearEntity)
                 .append("] ")
                 .toString();
     }

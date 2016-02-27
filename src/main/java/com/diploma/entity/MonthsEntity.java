@@ -2,6 +2,7 @@ package com.diploma.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by boubdyk on 22.02.2016.
@@ -22,8 +23,15 @@ public class MonthsEntity implements Serializable {
     @Column(name = "months_number")
     private Integer monthsNumber;
 
-    @Column(name = "id_year")
-    private Long idYear;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_year")
+    private YearEntity yearEntity;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "monthsEntity")
+    private List<ForecastEntity> forecastEntities;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "monthsEntity")
+    private List<PatientsEntity> patientsEntities;
 
     public MonthsEntity() {}
 
@@ -51,12 +59,28 @@ public class MonthsEntity implements Serializable {
         this.monthsNumber = monthsNumber;
     }
 
-    public Long getIdYear() {
-        return idYear;
+    public YearEntity getYearEntity() {
+        return yearEntity;
     }
 
-    public void setIdYear(Long idYear) {
-        this.idYear = idYear;
+    public void setYearEntity(YearEntity yearEntity) {
+        this.yearEntity = yearEntity;
+    }
+
+    public List<ForecastEntity> getForecastEntities() {
+        return forecastEntities;
+    }
+
+    public void setForecastEntities(List<ForecastEntity> forecastEntities) {
+        this.forecastEntities = forecastEntities;
+    }
+
+    public List<PatientsEntity> getPatientsEntities() {
+        return patientsEntities;
+    }
+
+    public void setPatientsEntities(List<PatientsEntity> patientsEntities) {
+        this.patientsEntities = patientsEntities;
     }
 
     @Override
@@ -69,8 +93,8 @@ public class MonthsEntity implements Serializable {
                 .append(year)
                 .append(", monthsNumber=")
                 .append(monthsNumber)
-                .append(", idYear=")
-                .append(idYear)
+                .append(", yearEntity=")
+                .append(yearEntity)
                 .append("] ")
                 .toString();
     }
