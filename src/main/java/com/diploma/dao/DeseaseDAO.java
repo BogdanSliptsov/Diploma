@@ -55,10 +55,10 @@ public class DeseaseDAO implements IDataAccessObject<DeseaseEntity, Long> {
     /**
      * Used to get desease ID by desease name
      * @param name
-     * @return
+     * @return desease id.
      */
     public Long getIdByName(String name) {
-        String query = "SELECT d FROM DeseaseEntity d WHERE d.name=" + name + ";";
+        String query = "SELECT d FROM DeseaseEntity d WHERE d.name=\'" + name + "\'";
         TypedQuery<DeseaseEntity> result = entityManager.createQuery(query, DeseaseEntity.class);
         return result.getSingleResult().getId();
     }

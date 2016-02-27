@@ -42,8 +42,19 @@ public class PatientsDAO implements IDataAccessObject<PatientsEntity, Long> {
         entityManager.remove(patientsEntity);
     }
 
+    /**
+     * Used to get all patients of desease.
+     * @param deseaseID
+     * @return
+     */
     public List<PatientsEntity> getByDeseaseID(Long deseaseID) {
-        String query = "SELECT p FROM PatientsEntity p WHERE p.id_desease=\'" + deseaseID + "\'";
+        String query = "SELECT p FROM PatientsEntity p WHERE p.diseaseId=\'" + deseaseID + "\'";
+        TypedQuery<PatientsEntity> result = entityManager.createQuery(query, PatientsEntity.class);
+        return result.getResultList();
+    }
+
+    public List<PatientsEntity> getAll() {
+        String query = "SELECT p FROM PatientsEntity p";
         TypedQuery<PatientsEntity> result = entityManager.createQuery(query, PatientsEntity.class);
         return result.getResultList();
     }

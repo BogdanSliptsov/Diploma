@@ -17,9 +17,6 @@ public class MonthsEntity implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "year")
-    private Integer year;
-
     @Column(name = "months_number")
     private Integer monthsNumber;
 
@@ -30,10 +27,15 @@ public class MonthsEntity implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "monthsEntity")
     private List<ForecastEntity> forecastEntities;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "monthsEntity")
-    private List<PatientsEntity> patientsEntities;
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "monthsEntity")
+//    private List<PatientsEntity> patientsEntities;
 
     public MonthsEntity() {}
+
+    public MonthsEntity(Integer monthsNumber, YearEntity yearEntity) {
+        this.monthsNumber = monthsNumber;
+        this.yearEntity = yearEntity;
+    }
 
     public Long getId() {
         return id;
@@ -41,14 +43,6 @@ public class MonthsEntity implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
     }
 
     public Integer getMonthsNumber() {
@@ -75,13 +69,13 @@ public class MonthsEntity implements Serializable {
         this.forecastEntities = forecastEntities;
     }
 
-    public List<PatientsEntity> getPatientsEntities() {
-        return patientsEntities;
-    }
-
-    public void setPatientsEntities(List<PatientsEntity> patientsEntities) {
-        this.patientsEntities = patientsEntities;
-    }
+//    public List<PatientsEntity> getPatientsEntities() {
+//        return patientsEntities;
+//    }
+//
+//    public void setPatientsEntities(List<PatientsEntity> patientsEntities) {
+//        this.patientsEntities = patientsEntities;
+//    }
 
     @Override
     public String toString() {
@@ -89,8 +83,6 @@ public class MonthsEntity implements Serializable {
                 .append("MonthEntity[")
                 .append("id=")
                 .append(id)
-                .append(", year=")
-                .append(year)
                 .append(", monthsNumber=")
                 .append(monthsNumber)
                 .append(", yearEntity=")

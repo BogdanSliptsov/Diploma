@@ -23,13 +23,17 @@ public class YearEntity implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "yearEntity")
     private List<MonthsEntity> monthsEntities;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "yearEntity")
-    private List<PatientsEntity> patientsEntities;
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "yearEntity")
+//    private List<PatientsEntity> patientsEntities;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "yearEntity")
     private List<ForecastEntity> forecastEntities;
 
     public YearEntity() {}
+
+    public YearEntity(Integer yearNumber) {
+        this.yearNumber = yearNumber;
+    }
 
     public Long getId() {
         return id;
@@ -55,13 +59,13 @@ public class YearEntity implements Serializable {
         this.monthsEntities = monthsEntities;
     }
 
-    public List<PatientsEntity> getPatientsEntities() {
-        return patientsEntities;
-    }
-
-    public void setPatientsEntities(List<PatientsEntity> patientsEntities) {
-        this.patientsEntities = patientsEntities;
-    }
+//    public List<PatientsEntity> getPatientsEntities() {
+//        return patientsEntities;
+//    }
+//
+//    public void setPatientsEntities(List<PatientsEntity> patientsEntities) {
+//        this.patientsEntities = patientsEntities;
+//    }
 
     public List<ForecastEntity> getForecastEntities() {
         return forecastEntities;

@@ -5,6 +5,7 @@ import com.diploma.entity.DeseaseEntity;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Transactional
 public class DeseaseService {
 
+    @Inject
     private DeseaseDAO deseaseDAO;
 
     public DeseaseService() {}
@@ -31,12 +33,25 @@ public class DeseaseService {
     /**
      * Adding desease by name.
      * @param name desease name
-     * @return id of desease in DB.
+     * @return id of new disease in DB or id of present disease.
      */
-    public Long addDeseaseByName(String name) {
+    public Long addDiseaseByName(String name) {
         if (StringUtils.isEmpty(name)) return null;
-        DeseaseEntity deseaseEntity = new DeseaseEntity(name);
-        return deseaseDAO.create(deseaseEntity);
+        boolean exFlag = false;
+        Long id;
+        try {
+            id = deseaseDAO.getIdByName(name);
+        } catch (javax.persistence.NoResultException nee) {
+            exFlag = true;
+            id = null;
+        }
+        if (!exFlag) {
+            return id;
+        } else {
+            DeseaseEntity deseaseEntity = new DeseaseEntity(name);
+            return deseaseDAO.create(deseaseEntity);
+        }
+
     }
 
     /**

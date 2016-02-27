@@ -1,9 +1,17 @@
 package com.diploma;
 
+import com.diploma.entity.DeseaseEntity;
+import com.diploma.entity.PatientsEntity;
 import com.diploma.entity.TestEntity;
+import com.diploma.service.DeseaseService;
+import com.diploma.service.GeneralService;
+import com.diploma.service.PatientsService;
 import com.diploma.service.TestService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by boubdyk on 27.02.2016.
@@ -12,25 +20,32 @@ public class TestDB {
 
     private static ApplicationContext context;
     private static TestService testService;
+    private static DeseaseService deseaseService;
+    private static GeneralService generalService;
+    private static PatientsService patientsService;
 
     static {
         context = new ClassPathXmlApplicationContext("META-INF/app-context.xml");
-        testService = context.getBean(TestService.class);
+//        testService = context.getBean(TestService.class);
+        deseaseService = context.getBean(DeseaseService.class);
+        generalService = context.getBean(GeneralService.class);
+        patientsService = context.getBean(PatientsService.class);
     }
 
     public static void main(String[] args) {
-        TestEntity testEntity = new TestEntity();
 
-//        testEntity.setField("fildets123");
-//        System.out.println(testService.testCreate(testEntity));
+//        Map<Integer, Integer> map  = new HashMap<>();
+//        map.put(1, 2000);
+//        map.put(2, 2023);
+//        map.put(3, 2045);
+//        map.put(4, 2540);
+//        map.put(5, 2120);
+//        map.put(6, 1900);
+//        generalService.fillDataByMonths("OPA", 2010, map);
 
-//        System.out.println(testService.testRead(2L));
 
-//        TestEntity te = new TestEntity();
-//        te.setId(2L);
-//        te.setField("FILDDDD");
-//        System.out.println(testService.testUpdate(te));
-
-        testService.testDelete(2L);
+        for (PatientsEntity p: patientsService.getAllPatients()) {
+            System.out.println(p);
+        }
     }
 }
