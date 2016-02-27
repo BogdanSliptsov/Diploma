@@ -30,6 +30,10 @@ public class DeseaseEntity implements Serializable {
 
     public DeseaseEntity() {}
 
+    public DeseaseEntity(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

@@ -41,4 +41,25 @@ public class DeseaseDAO implements IDataAccessObject<DeseaseEntity, Long> {
         DeseaseEntity deseaseEntity = read(persistentObjectID);
         entityManager.remove(deseaseEntity);
     }
+
+    /**
+     * Used to get all deseases from DB.
+     * @return list of deseases.
+     */
+    public List<DeseaseEntity> getAll() {
+        String query = "SELECT d FROM DeseaseEntity d";
+        TypedQuery<DeseaseEntity> result = entityManager.createQuery(query, DeseaseEntity.class);
+        return result.getResultList();
+    }
+
+    /**
+     * Used to get desease ID by desease name
+     * @param name
+     * @return
+     */
+    public Long getIdByName(String name) {
+        String query = "SELECT d FROM DeseaseEntity d WHERE d.name=" + name + ";";
+        TypedQuery<DeseaseEntity> result = entityManager.createQuery(query, DeseaseEntity.class);
+        return result.getSingleResult().getId();
+    }
 }
