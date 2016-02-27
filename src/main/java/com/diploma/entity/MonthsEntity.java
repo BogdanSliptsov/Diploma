@@ -22,6 +22,9 @@ public class MonthsEntity implements Serializable {
     @Column(name = "months_number")
     private Integer monthsNumber;
 
+    @Column(name = "id_year")
+    private Long idYear;
+
     public MonthsEntity() {}
 
     public Long getId() {
@@ -48,6 +51,14 @@ public class MonthsEntity implements Serializable {
         this.monthsNumber = monthsNumber;
     }
 
+    public Long getIdYear() {
+        return idYear;
+    }
+
+    public void setIdYear(Long idYear) {
+        this.idYear = idYear;
+    }
+
     @Override
     public String toString() {
         return new StringBuilder()
@@ -58,6 +69,8 @@ public class MonthsEntity implements Serializable {
                 .append(year)
                 .append(", monthsNumber=")
                 .append(monthsNumber)
+                .append(", idYear=")
+                .append(idYear)
                 .append("] ")
                 .toString();
     }

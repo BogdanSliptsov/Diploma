@@ -25,6 +25,9 @@ public class PatientsEntity implements Serializable {
     @Column(name = "number_of_patients")
     private Integer numberOfPatients;
 
+    @Column(name = "id_year")
+    private Long idYear;
+
     public PatientsEntity() {}
 
     public Long getId() {
@@ -59,6 +62,14 @@ public class PatientsEntity implements Serializable {
         this.numberOfPatients = numberOfPatients;
     }
 
+    public Long getIdYear() {
+        return idYear;
+    }
+
+    public void setIdYear(Long idYear) {
+        this.idYear = idYear;
+    }
+
     @Override
     public String toString() {
         return new StringBuilder()
@@ -71,6 +82,8 @@ public class PatientsEntity implements Serializable {
                 .append(idMonth)
                 .append(", idDesease=")
                 .append(idDesease)
+                .append(", idYear=")
+                .append(idYear)
                 .append("] ")
                 .toString();
     }

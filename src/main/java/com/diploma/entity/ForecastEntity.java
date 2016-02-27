@@ -25,6 +25,9 @@ public class ForecastEntity implements Serializable {
     @Column(name = "id_desease")
     private Long idDesease;
 
+    @Column(name = "id_year")
+    private Long idYear;
+
     public ForecastEntity() {}
 
     public Long getId() {
@@ -59,6 +62,14 @@ public class ForecastEntity implements Serializable {
         this.idDesease = idDesease;
     }
 
+    public Long getIdYear() {
+        return idYear;
+    }
+
+    public void setIdYear(Long idYear) {
+        this.idYear = idYear;
+    }
+
     @Override
     public String toString() {
         return new StringBuilder()
@@ -71,6 +82,8 @@ public class ForecastEntity implements Serializable {
                 .append(idMonth)
                 .append(", idDesease=")
                 .append(idDesease)
+                .append(", idYear=")
+                .append(idYear)
                 .append("] ")
                 .toString();
     }
