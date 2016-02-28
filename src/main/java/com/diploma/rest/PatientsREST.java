@@ -15,6 +15,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * Created by boubdyk on 28.02.2016.
@@ -50,6 +51,22 @@ public class PatientsREST {
         Long id = generalService.fillDataByYear(diseaseName, yearNumber, numberOfPatients);
 
         if (id == null) {
+            return Response.status(Constants.CODE_NOT_MODIFIED).build();
+        }
+        return Response.status(Constants.CODE_CREATED).build();
+    }
+
+    @POST
+    @Path("/restore")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public final Response restoreDataForYears(final String input) throws ParseException {
+        JSONObject inputObj = (JSONObject) new JSONParser().parse(input);
+
+        String diseaseName = inputObj.get("diseaseName").toString();
+
+        List<Integer> restoredYears = generalService.restoreDataForYears(diseaseName);
+
+        if (restoredYears == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
         }
         return Response.status(Constants.CODE_CREATED).build();

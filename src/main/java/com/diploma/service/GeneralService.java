@@ -111,7 +111,7 @@ public class GeneralService {
     /**
      * Used to restore number of patients for absent years.
      * @param diseaseName desease name.
-     * @return List of restored values or null of there nothin to restore.
+     * @return List of restored years or null of there nothing to restore.
      */
     public List<Integer> restoreDataForYears(String diseaseName) {
         List<Integer> yearsToRestore = new ArrayList<>();
