@@ -108,8 +108,9 @@ public class PatientsREST {
         JSONObject inputObj = (JSONObject) new JSONParser().parse(input);
 
         String diseaseName = inputObj.get("diseaseName").toString();
+        Integer years = Integer.valueOf(inputObj.get("years").toString());
 
-        Map<Integer, Integer> map = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName);
+        Map<Integer, Integer> map = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
 
         if (map == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
@@ -135,7 +136,9 @@ public class PatientsREST {
         String diseaseName = inputObj.get("diseaseName").toString();
 
         //TODO Change here to valid math method
-        Map<Integer, Integer> map = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName);
+        Integer years = Integer.valueOf(inputObj.get("years").toString());
+
+        Map<Integer, Integer> map = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
 
         if (map == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
@@ -161,7 +164,9 @@ public class PatientsREST {
         String diseaseName = inputObj.get("diseaseName").toString();
 
         //TODO Change here to valid math method
-        Map<Integer, Integer> map = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName);
+        Integer years = Integer.valueOf(inputObj.get("years").toString());
+
+        Map<Integer, Integer> map = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
 
         if (map == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();

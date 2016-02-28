@@ -234,7 +234,8 @@ public class GeneralService {
      * @param diseaseName disease name.
      * @return map: key=year, value=numberOfPatients.
      */
-    public Map<Integer, Integer> getAllForecastedPatientsOfDiseaseSmoothing(String diseaseName) {
+    public Map<Integer, Integer> getAllForecastedPatientsOfDiseaseSmoothing(String diseaseName, Integer year) {
+        expSmoothForecastByYear(diseaseName, year);
         Long diseaseId = deseaseDAO.getIdByName(diseaseName);
 //        List<Integer> numberOfPatients = patientsDAO.getNumberOfPatientsByDiseaseIdForYears(diseaseId);
         List<Integer> actualNumberOfPatients = new ArrayList<>();
