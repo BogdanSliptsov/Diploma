@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * Created by boubdyk on 23.02.2016.
@@ -38,5 +41,15 @@ public class ForecastDAO implements IDataAccessObject<ForecastEntity, Long> {
     public void delete(Long persistentObjectID) {
         ForecastEntity forecastEntity = read(persistentObjectID);
         entityManager.remove(forecastEntity);
+    }
+
+    /**
+     * Used to get all forecasts for disease
+     * @return
+     */
+    public List<ForecastEntity> getAllByDiseaseId(Long diseaseId) {
+        String query = "SELECT f FROM ForecastEntity f WHERE f.deseaseEntity.id=" + diseaseId;
+        TypedQuery<ForecastEntity> result = entityManager.createQuery(query, ForecastEntity.class);
+        return result.getResultList();
     }
 }

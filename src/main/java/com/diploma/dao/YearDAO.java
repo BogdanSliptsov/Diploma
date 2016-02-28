@@ -21,6 +21,7 @@ public class YearDAO implements IDataAccessObject<YearEntity, Long> {
 
     @Override
     public Long create(YearEntity newInstance) {
+
         entityManager.persist(newInstance);
         return newInstance.getId();
     }
@@ -48,6 +49,17 @@ public class YearDAO implements IDataAccessObject<YearEntity, Long> {
     public Integer getYearNumberByYearId(Long yearId) {
         String query = "SELECT y.yearNumber FROM YearEntity y WHERE y.id=" + yearId;
         TypedQuery<Integer> result = entityManager.createQuery(query, Integer.class);
+        return result.getSingleResult();
+    }
+
+    /**
+     * Used to get year id by year number.
+     * @param yearNumber
+     * @return
+     */
+    public Long getYearIdByYearNumber(Integer yearNumber) {
+        String query = "SELECT y.id FROM YearEntity y WHERE y.yearNumber=" + yearNumber;
+        TypedQuery<Long> result = entityManager.createQuery(query, Long.class);
         return result.getSingleResult();
     }
 }

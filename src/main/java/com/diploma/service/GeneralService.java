@@ -39,6 +39,9 @@ public class GeneralService {
     @Inject
     private YearDAO yearDAO;
 
+    @Inject
+    private YearService yearService;
+
     public GeneralService() {}
 
 //    /**
@@ -63,8 +66,9 @@ public class GeneralService {
      */
     public void fillDataByMonths(String deseaseName, Integer year, Map<Integer, Integer> dataMap) {
         Long deseaseId = deseaseDAO.getIdByName(deseaseName);
-        YearEntity yearEntity = new YearEntity(year);
-        Long yearId = yearDAO.create(yearEntity);
+//        YearEntity yearEntity = new YearEntity(year);
+//        Long yearId = yearDAO.create(yearEntity);
+        Long yearId = yearService.createYear(year);
         List<Long> monthsIDs = new ArrayList<>();
 
         //Fills months table.
@@ -92,14 +96,16 @@ public class GeneralService {
      * @param diseaseName disease name.
      * @param year year number.
      * @param numberOfPatients number of patients for current disease.
+     * @return id of new record.
      */
-    public void fillDataByYear(String diseaseName, Integer year, Integer numberOfPatients) {
+    public Long fillDataByYear(String diseaseName, Integer year, Integer numberOfPatients) {
         Long diseaseId = deseaseDAO.getIdByName(diseaseName);
-        YearEntity yearEntity = new YearEntity(year);
-        Long yearId = yearDAO.create(yearEntity);
+//        YearEntity yearEntity = new YearEntity(year);
+//        Long yearId = yearDAO.create(yearEntity);
+        Long yearId = yearService.createYear(year);
 
-        PatientsEntity patientsEntity = new PatientsEntity(numberOfPatients, yearEntity, deseaseDAO.read(diseaseId));
-        patientsDAO.create(patientsEntity);
+        PatientsEntity patientsEntity = new PatientsEntity(numberOfPatients, yearDAO.read(yearId), deseaseDAO.read(diseaseId));
+        return patientsDAO.create(patientsEntity);
     }
 
     /**
@@ -142,6 +148,10 @@ public class GeneralService {
 //        return patientsToRestore;
         return yearsToRestore;
     }
+
+//    public void restoreDataForMonths(String diseaseName) {
+//
+//    }
 
 
 }
