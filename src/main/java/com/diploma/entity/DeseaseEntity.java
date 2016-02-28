@@ -25,8 +25,8 @@ public class DeseaseEntity implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "deseaseEntity")
     private List<ForecastEntity> forecastEntities;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "deseaseEntity")
-//    private List<PatientsEntity> patientsEntities;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "deseaseEntity")
+    private List<PatientsEntity> patientsEntities;
 
     public DeseaseEntity() {}
 
@@ -58,14 +58,14 @@ public class DeseaseEntity implements Serializable {
         this.forecastEntities = forecastEntities;
     }
 
-//    public List<PatientsEntity> getPatientsEntities() {
-//        return patientsEntities;
-//    }
-//
-//    public void setPatientsEntities(List<PatientsEntity> patientsEntities) {
-//        this.patientsEntities = patientsEntities;
-//    }
-//
+    public List<PatientsEntity> getPatientsEntities() {
+        return patientsEntities;
+    }
+
+    public void setPatientsEntities(List<PatientsEntity> patientsEntities) {
+        this.patientsEntities = patientsEntities;
+    }
+
 
 
     @Override

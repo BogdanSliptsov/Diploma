@@ -39,19 +39,19 @@ public class GeneralService {
 
     public GeneralService() {}
 
-    /**
-     * Used to get table of month and number of patients for each month.
-     * @param deseaseID desease id.
-     * @return map of key = monthsID, value = numberOfPatients.
-     */
-    public Map<Long, Integer> getAllPatientsOfDesease(Long deseaseID) {
-        if (deseaseID == null) return null;
-        Map<Long, Integer> map = new HashMap<>();
-        for (PatientsEntity p: patientsDAO.getByDeseaseID(deseaseID)) {
-            map.put(p.getDiseaseId(), p.getNumberOfPatients());
-        }
-        return map;
-    }
+//    /**
+//     * Used to get table of month and number of patients for each month.
+//     * @param deseaseID desease id.
+//     * @return map of key = monthsID, value = numberOfPatients.
+//     */
+//    public Map<Long, Integer> getAllPatientsOfDesease(Long deseaseID) {
+//        if (deseaseID == null) return null;
+//        Map<Long, Integer> map = new HashMap<>();
+//        for (PatientsEntity p: patientsDAO.getByDeseaseID(deseaseID)) {
+//            map.put(p.getDiseaseId(), p.getNumberOfPatients());
+//        }
+//        return map;
+//    }
 
     /**
      * Used to fill data by months
@@ -78,17 +78,26 @@ public class GeneralService {
         //Counter is used to get IDs of months.
         int counter = 0;
         for (Integer numberOfPatients: dataMap.values()) {
-            patientsEntity = new PatientsEntity(numberOfPatients, ye.getId(), monthsDAO.read(monthsIDs.get(counter)).getId(),
-                                                deseaseDAO.read(deseaseId).getId());
+            patientsEntity = new PatientsEntity(numberOfPatients, ye, monthsDAO.read(monthsIDs.get(counter)),
+                                                deseaseDAO.read(deseaseId));
             patientsDAO.create(patientsEntity);
             counter++;
         }
     }
 
-    private boolean checkDataPresenceForMonths(Integer year, Integer monthNumber, Long deseaseId) {
-        List<PatientsEntity> patientsEntities = patientsDAO.getByDeseaseID(deseaseId);
-        //TODO check of presence here
-        return true;
+    /**
+     * Used to fill data in patients table by year.
+     * @param diseaseName disease name.
+     * @param year year number.
+     * @param numberOfPatients number of patients for current disease.
+     */
+    public void fillDataByYear(String diseaseName, Integer year, Integer numberOfPatients) {
+        Long diseaseId = deseaseDAO.getIdByName(diseaseName);
+        YearEntity yearEntity = new YearEntity(year);
+        Long yearId = yearDAO.create(yearEntity);
+
+        PatientsEntity patientsEntity = new PatientsEntity(numberOfPatients, yearEntity, deseaseDAO.read(diseaseId));
+        patientsDAO.create(patientsEntity);
     }
 
 

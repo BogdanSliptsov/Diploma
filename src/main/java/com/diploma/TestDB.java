@@ -2,11 +2,9 @@ package com.diploma;
 
 import com.diploma.entity.DeseaseEntity;
 import com.diploma.entity.PatientsEntity;
-import com.diploma.entity.TestEntity;
 import com.diploma.service.DeseaseService;
 import com.diploma.service.GeneralService;
 import com.diploma.service.PatientsService;
-import com.diploma.service.TestService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -19,14 +17,12 @@ import java.util.Map;
 public class TestDB {
 
     private static ApplicationContext context;
-    private static TestService testService;
     private static DeseaseService deseaseService;
     private static GeneralService generalService;
     private static PatientsService patientsService;
 
     static {
         context = new ClassPathXmlApplicationContext("META-INF/app-context.xml");
-//        testService = context.getBean(TestService.class);
         deseaseService = context.getBean(DeseaseService.class);
         generalService = context.getBean(GeneralService.class);
         patientsService = context.getBean(PatientsService.class);
@@ -43,6 +39,7 @@ public class TestDB {
 //        map.put(6, 1900);
 //        generalService.fillDataByMonths("OPA", 2010, map);
 
+        generalService.fillDataByYear("OPA", 2014, 9999);
 
         for (PatientsEntity p: patientsService.getAllPatients()) {
             System.out.println(p);

@@ -27,8 +27,8 @@ public class MonthsEntity implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "monthsEntity")
     private List<ForecastEntity> forecastEntities;
 
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "monthsEntity")
-//    private List<PatientsEntity> patientsEntities;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "monthsEntity")
+    private List<PatientsEntity> patientsEntities;
 
     public MonthsEntity() {}
 
@@ -69,13 +69,13 @@ public class MonthsEntity implements Serializable {
         this.forecastEntities = forecastEntities;
     }
 
-//    public List<PatientsEntity> getPatientsEntities() {
-//        return patientsEntities;
-//    }
-//
-//    public void setPatientsEntities(List<PatientsEntity> patientsEntities) {
-//        this.patientsEntities = patientsEntities;
-//    }
+    public List<PatientsEntity> getPatientsEntities() {
+        return patientsEntities;
+    }
+
+    public void setPatientsEntities(List<PatientsEntity> patientsEntities) {
+        this.patientsEntities = patientsEntities;
+    }
 
     @Override
     public String toString() {
@@ -86,7 +86,7 @@ public class MonthsEntity implements Serializable {
                 .append(", monthsNumber=")
                 .append(monthsNumber)
                 .append(", yearEntity=")
-                .append(yearEntity)
+                .append(yearEntity.getYearNumber())
                 .append("] ")
                 .toString();
     }
