@@ -4,6 +4,7 @@ import com.diploma.service.DeseaseService;
 import com.diploma.service.GeneralService;
 import com.diploma.service.PatientsService;
 import com.diploma.service.YearService;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -13,9 +14,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by boubdyk on 28.02.2016.
@@ -54,6 +57,31 @@ public class PatientsREST {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
         }
         return Response.status(Constants.CODE_CREATED).build();
+    }
+
+    @POST
+    @Path("/get")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public final Response getPatients(final String input) throws ParseException {
+        JSONObject inputObj = (JSONObject) new JSONParser().parse(input);
+
+        String diseaseName = inputObj.get("diseaseName").toString();
+
+        Map<Integer, Integer> map = generalService.getAllPatientsOfDisease(diseaseName);
+
+        if (map == null) {
+            return Response.status(Constants.CODE_NOT_MODIFIED).build();
+        }
+        JSONArray returnJSON = new JSONArray();
+        JSONObject patientsJSON;
+
+        for (Map.Entry entry : map.entrySet()) {
+            patientsJSON = new JSONObject();
+            patientsJSON.put(entry.getKey(), entry.getValue());
+            returnJSON.add(patientsJSON);
+        }
+        return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
     }
 
     @POST

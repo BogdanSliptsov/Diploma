@@ -155,6 +155,34 @@ public class GeneralService {
 //    }
 
     /**
+     * Used to get al patients of disease by disease name.
+     * @param diseaseName disease name.
+     * @return map: key=year, value=numberOfPatients.
+     */
+    public Map<Integer, Integer> getAllPatientsOfDisease(String diseaseName) {
+        Long diseaseId = deseaseDAO.getIdByName(diseaseName);
+//        List<Integer> numberOfPatients = patientsDAO.getNumberOfPatientsByDiseaseIdForYears(diseaseId);
+        List<Integer> actualNumberOfPatients = new ArrayList<>();
+        List<Long> actualYearIDs = patientsDAO.getAllYearsForDisease(diseaseId);
+        List<Integer> actualYearsNumbers = new ArrayList<>();
+
+        int counterForNextLoop = 0;
+        for (Long yearId : actualYearIDs) {
+            actualYearsNumbers.add(yearDAO.getYearNumberByYearId(yearId));
+            actualNumberOfPatients.add(patientsDAO.getNumberOfPatientsForYearID(diseaseId, yearId));
+            counterForNextLoop++;
+        }
+
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < counterForNextLoop; i++) {
+            map.put(actualYearsNumbers.get(i), actualNumberOfPatients.get(i));
+        }
+
+        return map;
+    }
+
+    /**
      * Used to make forecast for disease by years.
      * @param diseaseName
      * @param lastYear value max = 5
