@@ -155,7 +155,7 @@ public class GeneralService {
 //    }
 
     /**
-     * Used to get al patients of disease by disease name.
+     * Used to get all patients of disease by disease name.
      * @param diseaseName disease name.
      * @return map: key=year, value=numberOfPatients.
      */
@@ -191,45 +191,70 @@ public class GeneralService {
         ExponentialSmoothing exponentialSmoothing = new ExponentialSmoothing();
         List<Double> inputListForSmoothing = new ArrayList<>();
         Long diseaseId = deseaseDAO.getIdByName(diseaseName);
-        List<Integer> numberOfPatients = patientsDAO.getNumberOfPatientsByDiseaseIdForYears(diseaseId);
+//        List<Integer> numberOfPatients = patientsDAO.getNumberOfPatientsByDiseaseIdForYears(diseaseId);
         List<Long> actualYearIDs = patientsDAO.getAllYearsForDisease(diseaseId);
         List<Integer> actualYearsNumbers = new ArrayList<>();
         List<Integer> actualNumberOfPatients = new ArrayList<>();
+
 
         for (Long yearId : actualYearIDs) {
             actualYearsNumbers.add(yearDAO.getYearNumberByYearId(yearId));
             actualNumberOfPatients.add(patientsDAO.getNumberOfPatientsForYearID(diseaseId, yearId));
         }
 
-        do {
-            for (int i = 0; i < numberOfPatients.size(); i++) {
-                inputListForSmoothing.add(numberOfPatients.get(i) + 0.0);
+        int lastLoop = actualNumberOfPatients.size();
+        lastYear ++;
+        while (lastYear > 0) {
+            for (int i = 0; i < actualNumberOfPatients.size(); i++) {
+                inputListForSmoothing.add(actualNumberOfPatients.get(i) + 0.0);
             }
             List<Double> smoothList = exponentialSmoothing.smooth(inputListForSmoothing);
             Double newValue = smoothList.get(smoothList.size() - 1);
             inputListForSmoothing.add(newValue);
             //Add forecasted years
-            actualYearsNumbers.add(actualYearsNumbers.get(actualYearsNumbers.size() - 1) + 1);
-        } while (--lastYear == 0);
+            Long yearId = yearService.createYear(actualYearsNumbers.get(actualYearsNumbers.size() - 1) + 1);
+            actualYearsNumbers.add(yearDAO.getYearNumberByYearId(yearId));
+            actualNumberOfPatients.add(newValue.intValue());
+            lastYear--;
+        }
 
         forecastService.deleteForYear("SMOOTHING", deseaseDAO.getIdByName(diseaseName));
 
-        //Add new values to actual number of patients
-        for (Double d: inputListForSmoothing) {
-            actualNumberOfPatients.add(d.intValue());
-        }
-
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
-        System.out.println("actualNumberOfPatients = " + actualNumberOfPatients.size());
-        System.out.println("actualYearsNumbers = " + actualYearsNumbers.size());
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
-
         //Addind years to table YEAR and gettin year IDs
         for (int i = 0; i < actualNumberOfPatients.size(); i++) {
-            forecastDAO.create(new ForecastEntity(actualNumberOfPatients.get(i), deseaseDAO.read(diseaseId),
-                                yearDAO.read(yearService.createYear(actualYearsNumbers.get(i))), "SMOOTHING"));
+            if (i != lastLoop) {
+                forecastDAO.create(new ForecastEntity(actualNumberOfPatients.get(i), deseaseDAO.read(diseaseId),
+                        yearDAO.read(yearService.createYear(actualYearsNumbers.get(i))), "SMOOTHING"));
+            }
         }
     }
 
+    /**
+     * Used to get all forecasted patients of disease by disease name.
+     * @param diseaseName disease name.
+     * @return map: key=year, value=numberOfPatients.
+     */
+    public Map<Integer, Integer> getAllForecastedPatientsOfDiseaseSmoothing(String diseaseName) {
+        Long diseaseId = deseaseDAO.getIdByName(diseaseName);
+//        List<Integer> numberOfPatients = patientsDAO.getNumberOfPatientsByDiseaseIdForYears(diseaseId);
+        List<Integer> actualNumberOfPatients = new ArrayList<>();
+        List<Long> actualYearIDs = forecastDAO.getAllForecastedYearsForDisease(diseaseId);
+        List<Integer> actualYearsNumbers = new ArrayList<>();
+
+        int counterForNextLoop = 0;
+        for (Long yearId : actualYearIDs) {
+            actualYearsNumbers.add(yearDAO.getYearNumberByYearId(yearId));
+            actualNumberOfPatients.add(forecastDAO.getNumberOfForecastedPatientsForYearID(diseaseId, yearId));
+            counterForNextLoop++;
+        }
+
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < counterForNextLoop; i++) {
+            map.put(actualYearsNumbers.get(i), actualNumberOfPatients.get(i));
+        }
+
+        return map;
+    }
 
 }

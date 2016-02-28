@@ -53,9 +53,12 @@ public class TestDB {
 //        System.out.println(forecastService.deleteForYear("asd", 10L));
 
         // TODO
-//        generalService.expSmoothForecastByYear("OPA", 3);
+        generalService.expSmoothForecastByYear("OPA", 3);
 
-        for (Map.Entry<Integer, Integer> entry: generalService.getAllPatientsOfDisease("OPA").entrySet()) {
+//        forecastService.deleteForYear("SMOOTHING", 7L);
+
+
+        for (Map.Entry<Integer, Integer> entry: generalService.getAllForecastedPatientsOfDiseaseSmoothing("OPA").entrySet()) {
             System.out.println(entry.getKey() + "=" + entry.getValue());
         }
 

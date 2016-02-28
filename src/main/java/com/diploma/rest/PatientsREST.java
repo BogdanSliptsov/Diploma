@@ -99,4 +99,81 @@ public class PatientsREST {
         }
         return Response.status(Constants.CODE_CREATED).build();
     }
+
+    @POST
+    @Path("/forecast/smoothing")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public final Response getForecastedPatientsSmoothing(final String input) throws ParseException {
+        JSONObject inputObj = (JSONObject) new JSONParser().parse(input);
+
+        String diseaseName = inputObj.get("diseaseName").toString();
+
+        Map<Integer, Integer> map = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName);
+
+        if (map == null) {
+            return Response.status(Constants.CODE_NOT_MODIFIED).build();
+        }
+        JSONArray returnJSON = new JSONArray();
+        JSONObject patientsJSON;
+
+        for (Map.Entry entry : map.entrySet()) {
+            patientsJSON = new JSONObject();
+            patientsJSON.put(entry.getKey(), entry.getValue());
+            returnJSON.add(patientsJSON);
+        }
+        return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
+    }
+
+    @POST
+    @Path("/forecast/fourier")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public final Response getForecastedPatientsFourierSeries(final String input) throws ParseException {
+        JSONObject inputObj = (JSONObject) new JSONParser().parse(input);
+
+        String diseaseName = inputObj.get("diseaseName").toString();
+
+        //TODO Change here to valid math method
+        Map<Integer, Integer> map = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName);
+
+        if (map == null) {
+            return Response.status(Constants.CODE_NOT_MODIFIED).build();
+        }
+        JSONArray returnJSON = new JSONArray();
+        JSONObject patientsJSON;
+
+        for (Map.Entry entry : map.entrySet()) {
+            patientsJSON = new JSONObject();
+            patientsJSON.put(entry.getKey(), entry.getValue());
+            returnJSON.add(patientsJSON);
+        }
+        return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
+    }
+
+    @POST
+    @Path("/forecast/polinom")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public final Response getForecastedPatientsPolinom(final String input) throws ParseException {
+        JSONObject inputObj = (JSONObject) new JSONParser().parse(input);
+
+        String diseaseName = inputObj.get("diseaseName").toString();
+
+        //TODO Change here to valid math method
+        Map<Integer, Integer> map = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName);
+
+        if (map == null) {
+            return Response.status(Constants.CODE_NOT_MODIFIED).build();
+        }
+        JSONArray returnJSON = new JSONArray();
+        JSONObject patientsJSON;
+
+        for (Map.Entry entry : map.entrySet()) {
+            patientsJSON = new JSONObject();
+            patientsJSON.put(entry.getKey(), entry.getValue());
+            returnJSON.add(patientsJSON);
+        }
+        return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
+    }
 }

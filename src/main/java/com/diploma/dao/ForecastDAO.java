@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -53,15 +54,40 @@ public class ForecastDAO implements IDataAccessObject<ForecastEntity, Long> {
         return result.getResultList();
     }
 
+
     /**
      * Used to delete record for disease by math method name.
      * @param methodName math method name.
      * @param diseaseId disease id.
      */
     public void deleteByMethodNameForYears(String methodName, Long diseaseId) {
-        String query = "DELETE FROM ForecastEntity f WHERE f.methodName=" +
-                methodName + " AND f.deseaseEntity.id=" + diseaseId +
-                " AND f.monthsEntity.id IS NULL";
-        entityManager.createQuery(query);
+        Query query = entityManager.createNativeQuery("DELETE FROM forecast WHERE methodName=\""
+                + methodName + "\" AND id_desease=" + diseaseId
+                + " AND id_month IS NULL ");
+        query.executeUpdate();
+    }
+
+    /**
+     * Used to get all forecasted years ID's for current disease.
+     * @param diseaseId disease id.
+     * @return list of ID's.
+     */
+    public List<Long> getAllForecastedYearsForDisease(Long diseaseId) {
+        String query = "SELECT f.yearEntity.id FROM ForecastEntity f WHERE f.deseaseEntity.id=" + diseaseId +
+                " AND f.monthsEntity.id is NULL";
+        TypedQuery<Long> result = entityManager.createQuery(query, Long.class);
+        return result.getResultList();
+    }
+
+    /**
+     * Used to get number of patients for year.
+     * @return number of patients.
+     */
+    public Integer getNumberOfForecastedPatientsForYearID(Long diseaseId, Long yearId) {
+        String query = "SELECT p.numberOfPatients FROM ForecastEntity p WHERE p.yearEntity.id=" +
+                yearId + " AND p.deseaseEntity.id=" + diseaseId +
+                " AND p.monthsEntity.id IS NULL";
+        TypedQuery<Integer> result = entityManager.createQuery(query, Integer.class);
+        return result.getSingleResult();
     }
 }
