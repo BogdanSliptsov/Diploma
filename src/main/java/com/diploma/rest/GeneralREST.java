@@ -1,7 +1,5 @@
 package com.diploma.rest;
 
-import com.diploma.entity.TestEntity;
-import com.diploma.service.TestService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -22,30 +20,30 @@ import javax.ws.rs.core.Response;
 @Path("/general")
 public class GeneralREST {
 
-    private static ApplicationContext context;
-    private static TestService testService;
-
-    static {
-        context = new ClassPathXmlApplicationContext("META-INF/app-context.xml");
-        testService = context.getBean(TestService.class);
-    }
-
-    @POST
-    @Path("/create")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public final Response testCreate(final String input) throws ParseException {
-        System.out.println("\n\n\n\n\nGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGggg\n\n\n\n\n\n\n\n\n");
-        JSONObject inputObj = (JSONObject) new JSONParser().parse(input);
-        String field = inputObj.get("field").toString();
-        TestEntity te = new TestEntity();
-        te.setField(field);
-        Long id = testService.testCreate(te);
-        if (id == null) {
-            return Response.status(Constants.CODE_NOT_MODIFIED).build();
-        }
-        JSONObject returnObj = new JSONObject();
-        returnObj.put("id", id);
-        return Response.status(Constants.CODE_CREATED).entity(returnObj.toJSONString()).build();
-    }
+//    private static ApplicationContext context;
+//    private static TestService testService;
+//
+//    static {
+//        context = new ClassPathXmlApplicationContext("META-INF/app-context.xml");
+//        testService = context.getBean(TestService.class);
+//    }
+//
+//    @POST
+//    @Path("/create")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public final Response testCreate(final String input) throws ParseException {
+//        System.out.println("\n\n\n\n\nGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGggg\n\n\n\n\n\n\n\n\n");
+//        JSONObject inputObj = (JSONObject) new JSONParser().parse(input);
+//        String field = inputObj.get("field").toString();
+//        TestEntity te = new TestEntity();
+//        te.setField(field);
+//        Long id = testService.testCreate(te);
+//        if (id == null) {
+//            return Response.status(Constants.CODE_NOT_MODIFIED).build();
+//        }
+//        JSONObject returnObj = new JSONObject();
+//        returnObj.put("id", id);
+//        return Response.status(Constants.CODE_CREATED).entity(returnObj.toJSONString()).build();
+//    }
 }

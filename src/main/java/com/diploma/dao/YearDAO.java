@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  * Created by boubdyk on 27.02.2016.
@@ -37,5 +38,16 @@ public class YearDAO implements IDataAccessObject<YearEntity, Long> {
     @Override
     public void delete(Long persistentObjectID) {
         entityManager.remove(read(persistentObjectID));
+    }
+
+    /**
+     * Used to get year number by year id.
+     * @param yearId year id.
+     * @return year number.
+     */
+    public Integer getYearNumberByYearId(Long yearId) {
+        String query = "SELECT y.yearNumber FROM YearEntity y WHERE y.id=" + yearId;
+        TypedQuery<Integer> result = entityManager.createQuery(query, Integer.class);
+        return result.getSingleResult();
     }
 }

@@ -1,10 +1,12 @@
 package com.diploma.service;
 
+import com.diploma.Point;
 import com.diploma.dao.*;
 import com.diploma.entity.DeseaseEntity;
 import com.diploma.entity.MonthsEntity;
 import com.diploma.entity.PatientsEntity;
 import com.diploma.entity.YearEntity;
+import com.diploma.interpolation.LagrangeInterpolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
@@ -98,6 +100,47 @@ public class GeneralService {
 
         PatientsEntity patientsEntity = new PatientsEntity(numberOfPatients, yearEntity, deseaseDAO.read(diseaseId));
         patientsDAO.create(patientsEntity);
+    }
+
+    /**
+     * Used to restore number of patients for absent years.
+     * @param diseaseName desease name.
+     * @return List of restored values or null of there nothin to restore.
+     */
+    public List<Integer> restoreDataForYears(String diseaseName) {
+        List<Integer> yearsToRestore = new ArrayList<>();
+        List<Integer> actualYearsNumbers = new ArrayList<>();
+        Long diseaseId = deseaseDAO.getIdByName(diseaseName);
+        List<Long> actualYearIDs = patientsDAO.getAllYearsForDisease(diseaseId);
+        List<Integer> actualNumberOfPatients = new ArrayList<>();
+        for (Long yearId : actualYearIDs) {
+            actualYearsNumbers.add(yearDAO.getYearNumberByYearId(yearId));
+            actualNumberOfPatients.add(patientsDAO.getNumberOfPatientsForYearID(diseaseId, yearId));
+        }
+        for (int i = 0; i < actualYearsNumbers.size() - 1; i++) {
+            if (!actualYearsNumbers.get(i + 1).equals(actualYearsNumbers.get(i) + 1)) {
+                yearsToRestore.add(actualYearsNumbers.get(i) + 1);
+            }
+        }
+        if (yearsToRestore.isEmpty()) return null;
+        List<Point> points = new ArrayList<>();
+        for (int i = 0; i < actualYearsNumbers.size(); i++) {
+            points.add(new Point(actualYearsNumbers.get(i) + 0.0, actualNumberOfPatients.get(i) + 0.0));
+        }
+
+        LagrangeInterpolation interpolation = new LagrangeInterpolation(points);
+        List<Long> patientsToRestore = new ArrayList<>();
+        for (int i = 0; i < yearsToRestore.size(); i++) {
+            patientsToRestore.add(Math.round(interpolation.calculate(yearsToRestore.get(i) + 0.0)));
+        }
+
+        //Filling restored data
+        for (int i = 0; i < patientsToRestore.size(); i++) {
+            fillDataByYear(diseaseName, yearsToRestore.get(i), (int)(long)patientsToRestore.get(i));
+        }
+
+//        return patientsToRestore;
+        return yearsToRestore;
     }
 
 

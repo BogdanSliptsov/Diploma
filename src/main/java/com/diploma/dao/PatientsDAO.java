@@ -53,9 +53,48 @@ public class PatientsDAO implements IDataAccessObject<PatientsEntity, Long> {
         return result.getResultList();
     }
 
+    /**
+     * Used to get all patients from DB.
+     * @return
+     */
     public List<PatientsEntity> getAll() {
         String query = "SELECT p FROM PatientsEntity p";
         TypedQuery<PatientsEntity> result = entityManager.createQuery(query, PatientsEntity.class);
         return result.getResultList();
+    }
+
+    /**
+     * Used to get all years ID's for current disease.
+     * @param diseaseId disease id.
+     * @return list of ID's.
+     */
+    public List<Long> getAllYearsForDisease(Long diseaseId) {
+        String query = "SELECT p.yearEntity.id FROM PatientsEntity p WHERE p.deseaseEntity.id=" + diseaseId +
+                " AND p.monthsEntity.id is NULL";
+        TypedQuery<Long> result = entityManager.createQuery(query, Long.class);
+        return result.getResultList();
+    }
+
+    /**
+     * Used to get ID's of all months for current disease.
+     * @param diseaseId disease id.
+     * @return lis of months ID's.
+     */
+    public List<Long> getAllMonthsForDisease(Long diseaseId) {
+        String query = "SELECT p.id_month FROM PatientsEntity p WHERE p.id_desease=" + diseaseId;
+        TypedQuery<Long> result = entityManager.createQuery(query, Long.class);
+        return result.getResultList();
+    }
+
+    /**
+     * Used to get number of patients for year.
+     * @return number of patients.
+     */
+    public Integer getNumberOfPatientsForYearID(Long diseaseId, Long yearId) {
+        String query = "SELECT p.numberOfPatients FROM PatientsEntity p WHERE p.yearEntity.id=" +
+                yearId + " AND p.deseaseEntity.id=" + diseaseId +
+                " AND p.monthsEntity.id IS NULL";
+        TypedQuery<Integer> result = entityManager.createQuery(query, Integer.class);
+        return result.getSingleResult();
     }
 }

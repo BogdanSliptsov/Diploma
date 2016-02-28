@@ -28,4 +28,5 @@ public class PatientsService {
     public List<PatientsEntity> getAllPatients() {
         return patientsDAO.getAll();
     }
+
 }

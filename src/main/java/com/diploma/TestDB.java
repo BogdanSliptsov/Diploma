@@ -30,16 +30,17 @@ public class TestDB {
 
     public static void main(String[] args) {
 
-//        Map<Integer, Integer> map  = new HashMap<>();
-//        map.put(1, 2000);
-//        map.put(2, 2023);
-//        map.put(3, 2045);
-//        map.put(4, 2540);
-//        map.put(5, 2120);
-//        map.put(6, 1900);
-//        generalService.fillDataByMonths("OPA", 2010, map);
+        generalService.fillDataByYear("OPA", 2010, 2100);
+        generalService.fillDataByYear("OPA", 2011, 2765);
+        generalService.fillDataByYear("OPA", 2013, 2983);
+        generalService.fillDataByYear("OPA", 2014, 2481);
+        generalService.fillDataByYear("OPA", 2016, 2198);
 
-        generalService.fillDataByYear("OPA", 2014, 9999);
+
+        for (Integer l : generalService.restoreDataForYears("OPA")) {
+            System.out.println(l);
+        }
+
 
         for (PatientsEntity p: patientsService.getAllPatients()) {
             System.out.println(p);
