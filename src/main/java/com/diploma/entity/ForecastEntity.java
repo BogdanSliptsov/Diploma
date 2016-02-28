@@ -31,7 +31,17 @@ public class ForecastEntity implements Serializable {
     @JoinColumn(name = "id_year")
     private YearEntity yearEntity;
 
+    @Column(name = "methodName")
+    private String methodName;
+
     public ForecastEntity() {}
+
+    public ForecastEntity(Integer numberOfPatients, DeseaseEntity deseaseEntity, YearEntity yearEntity, String methodName) {
+        this.numberOfPatients = numberOfPatients;
+        this.deseaseEntity = deseaseEntity;
+        this.yearEntity = yearEntity;
+        this.methodName = methodName;
+    }
 
     public Long getId() {
         return id;
@@ -73,7 +83,13 @@ public class ForecastEntity implements Serializable {
         this.yearEntity = yearEntity;
     }
 
+    public String getMethodName() {
+        return methodName;
+    }
 
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
 
     @Override
     public String toString() {
@@ -83,6 +99,8 @@ public class ForecastEntity implements Serializable {
                 .append(id)
                 .append(", numberOfPatients=")
                 .append(numberOfPatients)
+                .append(", methodName=")
+                .append(methodName)
                 .append(", monthsEntity=")
                 .append(monthsEntity)
                 .append(", deseaseEntity=")

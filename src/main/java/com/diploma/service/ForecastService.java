@@ -24,4 +24,9 @@ public class ForecastService {
     public List<ForecastEntity> getForecastForDisease(Long diseaseId) {
         return forecastDAO.getAllByDiseaseId(diseaseId);
     }
+
+    public boolean deleteForYear(String methodName, Long diseaseId) {
+        forecastDAO.deleteByMethodNameForYears(methodName, diseaseId);
+        return true;
+    }
 }

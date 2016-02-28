@@ -1,11 +1,9 @@
 package com.diploma.service;
 
 import com.diploma.Point;
+import com.diploma.approximation.ExponentialSmoothing;
 import com.diploma.dao.*;
-import com.diploma.entity.DeseaseEntity;
-import com.diploma.entity.MonthsEntity;
-import com.diploma.entity.PatientsEntity;
-import com.diploma.entity.YearEntity;
+import com.diploma.entity.*;
 import com.diploma.interpolation.LagrangeInterpolation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +39,9 @@ public class GeneralService {
 
     @Inject
     private YearService yearService;
+
+    @Inject
+    private ForecastService forecastService;
 
     public GeneralService() {}
 
@@ -152,6 +153,55 @@ public class GeneralService {
 //    public void restoreDataForMonths(String diseaseName) {
 //
 //    }
+
+    /**
+     * Used to make forecast for disease by years.
+     * @param diseaseName
+     * @param lastYear value max = 5
+     */
+    public void expSmoothForecastByYear(String diseaseName, int lastYear) {
+        ExponentialSmoothing exponentialSmoothing = new ExponentialSmoothing();
+        List<Double> inputListForSmoothing = new ArrayList<>();
+        Long diseaseId = deseaseDAO.getIdByName(diseaseName);
+        List<Integer> numberOfPatients = patientsDAO.getNumberOfPatientsByDiseaseIdForYears(diseaseId);
+        List<Long> actualYearIDs = patientsDAO.getAllYearsForDisease(diseaseId);
+        List<Integer> actualYearsNumbers = new ArrayList<>();
+        List<Integer> actualNumberOfPatients = new ArrayList<>();
+
+        for (Long yearId : actualYearIDs) {
+            actualYearsNumbers.add(yearDAO.getYearNumberByYearId(yearId));
+            actualNumberOfPatients.add(patientsDAO.getNumberOfPatientsForYearID(diseaseId, yearId));
+        }
+
+        do {
+            for (int i = 0; i < numberOfPatients.size(); i++) {
+                inputListForSmoothing.add(numberOfPatients.get(i) + 0.0);
+            }
+            List<Double> smoothList = exponentialSmoothing.smooth(inputListForSmoothing);
+            Double newValue = smoothList.get(smoothList.size() - 1);
+            inputListForSmoothing.add(newValue);
+            //Add forecasted years
+            actualYearsNumbers.add(actualYearsNumbers.get(actualYearsNumbers.size() - 1) + 1);
+        } while (--lastYear == 0);
+
+        forecastService.deleteForYear("SMOOTHING", deseaseDAO.getIdByName(diseaseName));
+
+        //Add new values to actual number of patients
+        for (Double d: inputListForSmoothing) {
+            actualNumberOfPatients.add(d.intValue());
+        }
+
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+        System.out.println("actualNumberOfPatients = " + actualNumberOfPatients.size());
+        System.out.println("actualYearsNumbers = " + actualYearsNumbers.size());
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n");
+
+        //Addind years to table YEAR and gettin year IDs
+        for (int i = 0; i < actualNumberOfPatients.size(); i++) {
+            forecastDAO.create(new ForecastEntity(actualNumberOfPatients.get(i), deseaseDAO.read(diseaseId),
+                                yearDAO.read(yearService.createYear(actualYearsNumbers.get(i))), "SMOOTHING"));
+        }
+    }
 
 
 }

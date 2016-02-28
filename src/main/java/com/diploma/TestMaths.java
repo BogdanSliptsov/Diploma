@@ -65,9 +65,9 @@ public class TestMaths {
         points.add(new Point(3.0, 1.5));
 
 //        testPolynomialApproximation(points);
-//        testEponentialSmoothing(points);
+        testEponentialSmoothing(points);
 //        testFourierSeries(points);
-        testLagrangeInterpolation(points);
+//        testLagrangeInterpolation(points);
     }
 
 }

@@ -2,10 +2,7 @@ package com.diploma;
 
 import com.diploma.entity.DeseaseEntity;
 import com.diploma.entity.PatientsEntity;
-import com.diploma.service.DeseaseService;
-import com.diploma.service.GeneralService;
-import com.diploma.service.PatientsService;
-import com.diploma.service.YearService;
+import com.diploma.service.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -22,6 +19,7 @@ public class TestDB {
     private static GeneralService generalService;
     private static PatientsService patientsService;
     private static YearService yearService;
+    private static ForecastService forecastService;
 
     static {
         context = new ClassPathXmlApplicationContext("META-INF/app-context.xml");
@@ -29,6 +27,7 @@ public class TestDB {
         generalService = context.getBean(GeneralService.class);
         patientsService = context.getBean(PatientsService.class);
         yearService = context.getBean(YearService.class);
+        forecastService = context.getBean(ForecastService.class);
     }
 
     public static void main(String[] args) {
@@ -49,7 +48,9 @@ public class TestDB {
 //            System.out.println(p);
 //        }
 
-        System.out.println(yearService.createYear(2010));
+//        System.out.println(yearService.createYear(2010));
 
+//        System.out.println(forecastService.deleteForYear("asd", 10L));
+        generalService.expSmoothForecastByYear("OPA", 3);
     }
 }

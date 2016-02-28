@@ -52,4 +52,16 @@ public class ForecastDAO implements IDataAccessObject<ForecastEntity, Long> {
         TypedQuery<ForecastEntity> result = entityManager.createQuery(query, ForecastEntity.class);
         return result.getResultList();
     }
+
+    /**
+     * Used to delete record for disease by math method name.
+     * @param methodName math method name.
+     * @param diseaseId disease id.
+     */
+    public void deleteByMethodNameForYears(String methodName, Long diseaseId) {
+        String query = "DELETE FROM ForecastEntity f WHERE f.methodName=" +
+                methodName + " AND f.deseaseEntity.id=" + diseaseId +
+                " AND f.monthsEntity.id IS NULL";
+        entityManager.createQuery(query);
+    }
 }
