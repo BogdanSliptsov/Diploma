@@ -51,7 +51,7 @@ public class FourierSeries {
 
 
     // 4 in loop is max number of garmonics
-    public Double calculation(Double t) {
+    public Double calculation(Double t, Double y) {
         List<Double> sumResults = new ArrayList<Double>();
         List<Double> differenceList = new ArrayList<Double>();
         for (int i = 0; i < 10; i++) {
@@ -60,16 +60,17 @@ public class FourierSeries {
                 tmpResult += countAk(j, t) * Math.cos(j * t) + countBk(j, t) * Math.sin(j * t);
             }
             sumResults.add(countA0() + tmpResult);
-            differenceList.add(Math.sqrt(Math.pow(sumResults.get(i) - t, 2)));
+            differenceList.add(Math.sqrt(Math.pow(sumResults.get(i) - y, 2)));
         }
         return sumResults.get(differenceList.indexOf(Collections.min(differenceList)));
     }
 
-    public List<Double> fourierSeriesApproximation() {
+    public List<Double> fourierSeriesApproximation(Double pointToApproximate) {
         List<Double> resultList = new ArrayList<Double>();
         for (int i = 0; i < N; i++) {
-            resultList.add(calculation(yValues.get(i)));
+            resultList.add(calculation(xValues.get(i), yValues.get(i)));
         }
+//        resultList.add(calculation(pointToApproximate));
         return resultList;
     }
 

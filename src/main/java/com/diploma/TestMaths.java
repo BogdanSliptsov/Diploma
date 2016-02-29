@@ -44,7 +44,7 @@ public class TestMaths {
     }
 
     public static void testFourierSeries(List<Point> points) {
-        for (Double d: new FourierSeries(points).fourierSeriesApproximation()) {
+        for (Double d: new FourierSeries(points).fourierSeriesApproximation(4.0)) {
             System.out.println(d);
         }
     }
@@ -65,8 +65,8 @@ public class TestMaths {
         points.add(new Point(3.0, 1.5));
 
 //        testPolynomialApproximation(points);
-        testEponentialSmoothing(points);
-//        testFourierSeries(points);
+//        testEponentialSmoothing(points);
+        testFourierSeries(points);
 //        testLagrangeInterpolation(points);
     }
 
