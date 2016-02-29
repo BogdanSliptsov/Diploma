@@ -28,29 +28,19 @@
                 <option value="${item.name}">${item.name}</option>
             </c:forEach>
         </select>
-        <button type="submit">Show info</button>
+        <hr/>
+        <input id="user_year" style="width: 100px" type="text" class="form-control" placeholder="Year">
+        <hr/>
+        <button type="button" class="btn btn-default" onclick="getForCast(); return false;">Show info</button>
+        <button type="button" class="btn btn-default" onclick="restoreData(); return false;">Resore data</button>
+        <button type="button" class="btn btn-default" onclick="forecast(); return false;">Forecast</button>
     </form>
 
-    <div onclick="getForCast(); return false;">holla</div>
+    <hr/>
 
-    <hr />
+    <h3>Info:</h3>
+    <table class="table table-bordered" id="table_data">
 
-    <h3>Already existing diseases:</h3>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Year</th>
-            <th>Patients</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${restoredValues}" var="restoredValues" varStatus="status">
-            <tr>
-                <td>${restoredValues.key}</td>
-                <td>${restoredValues.value}</td>
-            </tr>
-        </c:forEach>
-        </tbody>
     </table>
 
     <div id="fx_values_graph" class="demo-placeholder"></div>
@@ -64,25 +54,103 @@
 
     function getForCast() {
         var diseaseNameInp = $("#disease_year").val();
-        jQuery.ajax ({
+        jQuery.ajax({
             url: "/rest/patient/get",
             type: "POST",
-            data: JSON.stringify({ diseaseName: diseaseNameInp }),
+            data: JSON.stringify({diseaseName: diseaseNameInp}),
             dataType: "json",
             contentType: "application/json; charset=utf-8"
-        }).done(function( data ) {
+        }).done(function (data) {
             console.log(data);
             var fx_values = [];
-            for(var i = 0; i < data.ResultList.length; i++){
+            for (var i = 0; i < data.ResultList.length; i++) {
                 fx_values.push([data.ResultList[i].year, data.ResultList[i].numberOfPatients]);
             }
-
+            set_fx_values_table(fx_values, 'table_data')
             $.plot("#fx_values_graph", [
-                { label: "Restoration", data: fx_values, points: {show: true}, lines: {show: true} },
+                {label: "Restoration", data: fx_values, points: {show: true}, lines: {show: true}},
 
             ]);
         });
 
+        function set_fx_values_table(fx_values, html_id) {
+            var html = '<thead><tr><th>Years</th><th>Pations</th></tr></thead><tbody>';
+            for (var i = 0; i < fx_values.length; i++) {
+                html += '<tr><td>' + fx_values[i][0] + '</td><td>' + fx_values[i][1] + '</td></tr>';
+            }
+            html += '</tbody>';
+            document.getElementById(html_id).innerHTML = html;
+        }
+
+        alert("Disease " + diseaseNameInp + " successfully added!");
+//        location.reload();
+    }
+
+    function restoreData() {
+        var diseaseNameInp = $("#disease_year").val();
+        jQuery.ajax({
+            url: "/rest/patient/restore",
+            type: "POST",
+            data: JSON.stringify({diseaseName: diseaseNameInp}),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8"
+        }).done(function (data) {
+            console.log(data);
+            var fx_values = [];
+            for (var i = 0; i < data.ResultList.length; i++) {
+                fx_values.push([data.ResultList[i].year, data.ResultList[i].numberOfPatients]);
+            }
+            set_fx_values_table(fx_values, 'table_data')
+            $.plot("#fx_values_graph", [
+                {label: "Restoration", data: fx_values, points: {show: true}, lines: {show: true}},
+
+            ]);
+        });
+
+        function set_fx_values_table(fx_values, html_id) {
+            var html = '<thead><tr><th>Years</th><th>Pations</th></tr></thead><tbody>';
+            for (var i = 0; i < fx_values.length; i++) {
+                html += '<tr><td>' + fx_values[i][0] + '</td><td>' + fx_values[i][1] + '</td></tr>';
+            }
+            html += '</tbody>';
+            document.getElementById(html_id).innerHTML = html;
+        }
+
+        alert("Disease " + diseaseNameInp + " successfully added!");
+//        location.reload();
+    }
+
+    function forecast() {
+        var diseaseNameInp = $("#disease_year").val();
+        var userYear = $("#user_year").val();
+        console.log(userYear);
+        jQuery.ajax({
+            url: "/rest/patient/forecast/smoothing",
+            type: "POST",
+            data: JSON.stringify({diseaseName: diseaseNameInp, years: userYear}),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8"
+        }).done(function (data) {
+            console.log(data);
+            var fx_values = [];
+            for (var i = 0; i < data.ResultList.length; i++) {
+                fx_values.push([data.ResultList[i].year, data.ResultList[i].numberOfPatients]);
+            }
+            set_fx_values_table(fx_values, 'table_data')
+            $.plot("#fx_values_graph", [
+                {label: "Restoration", data: fx_values, points: {show: true}, lines: {show: true}},
+
+            ]);
+        });
+
+        function set_fx_values_table(fx_values, html_id) {
+            var html = '<thead><tr><th>Years</th><th>Pations</th></tr></thead><tbody>';
+            for (var i = 0; i < fx_values.length; i++) {
+                html += '<tr><td>' + fx_values[i][0] + '</td><td>' + fx_values[i][1] + '</td></tr>';
+            }
+            html += '</tbody>';
+            document.getElementById(html_id).innerHTML = html;
+        }
 
         alert("Disease " + diseaseNameInp + " successfully added!");
 //        location.reload();

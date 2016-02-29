@@ -7,11 +7,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Diseases forecasting</a>
+            <a class="navbar-brand" href="/forecast.jsp">Show forecast</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/forecast.jsp">Show forecast</a></li>
+                <li><a href="#">Diseases forecasting</a></li>
+                <li><a href="">Show data</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Add data <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -20,7 +21,7 @@
                         <li><a href="/statistic.jsp">Add statistic</a></li>
                     </ul>
                 </li>
-                <li><a href="#about">About</a></li>
+                <li><a href="../about.jsp">About</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
