@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+</h:head>
+<h:body>
+    <h1>Add data page</h1>
+
+    <h3 style="margin-top:0">Make you choice nigga:</h3>
+    <p:button href="#" type="button" value="Add by months" onclick="showByMonths()">
+    </p:button>
+
+    <p:button href="#" type="button" value="Add by years" onclick="showByYears()">
+    </p:button>
+
+    <h:form id="fillFormByMonths">
+        <p:panel header="Adding data by months">
+            <p:messages autoUpdate="true"/>
+
+            <h:panelGrid id="grid" columns="2">
+                <h:outputLabel for="monthNumber" value="Number of month:" style="font-weight:bold"/>
+                <p:inputText id="monthNumber" value="#{validationView.integer}" label="Number of month">
+                    <f:validateDoubleRange minimum="1" maximum="12" />
+                </p:inputText>
+                <p:message for="monthNumber" />
+                <h:outputText value="#{validationView.integer}" />
+
+                <h:outputLabel for="numberPatientsForMonth" value="Number of patients:" style="font-weight:bold"/>
+                <p:inputText id="numberPatientsForMonth" value="#{validationView.integer}" label="Number of patients">
+                    <f:validateDoubleRange minimum="0" maximum="999999" />
+                </p:inputText>
+                <p:message for="numberPatientsForMonth" />
+                <h:outputText value="#{validationView.integer}" />
+            </h:panelGrid>
+
+            <p:commandButton value="Ajax" update="grid" icon="ui-icon-check" validateClient="true"
+                             style="margin-right:10px"/>
+        </p:panel>
+    </h:form>
+
+    <h:form id="fillFormByYears">
+
+    </h:form>
+
+    <script type="text/javascript">
+
+        function showByYears() {
+            document.getElementById("fillFormByMonths").style.display = "none";
+            document.getElementById("fillFormByYears").style.display = "block";
+        }
+
+        function showByMonths() {
+            document.getElementById("fillFormByMonths").style.display = "block";
+            document.getElementById("fillFormByYears").style.display = "none";
+        }
+
+    </script>
+
+</h:body>
+</html>
