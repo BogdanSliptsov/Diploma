@@ -1,5 +1,6 @@
 package com.diploma.frontend;
 
+import com.diploma.Point;
 import com.diploma.service.DeseaseService;
 import com.diploma.service.GeneralService;
 import org.springframework.context.ApplicationContext;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,7 +35,7 @@ public class ForecastController extends HttpServlet{
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String disease = req.getParameter("disease");
 
-        Map<Integer, Integer> allPatientsOfDisease = generalService.getAllPatientsOfDisease(disease);
+        List<Point> allPatientsOfDisease = generalService.getAllPatientsOfDisease(disease);
         req.setAttribute("restoredValues", allPatientsOfDisease);
         req.getRequestDispatcher("forecast.jsp").forward(req, resp);
 

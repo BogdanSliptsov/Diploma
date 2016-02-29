@@ -31,6 +31,8 @@
         <button type="submit">Show info</button>
     </form>
 
+    <div onclick="getForCast(); return false;">holla</div>
+
     <hr />
 
     <h3>Already existing diseases:</h3>
@@ -51,10 +53,8 @@
         </tbody>
     </table>
 
-    <p:chart type="line" model="#{chartView.lineModel1}" style="height:300px;"/>
 
 </div>
-
 
 <div class="container">
 
@@ -63,18 +63,25 @@
 <jsp:include page="common/js.jsp"/>
 <script type="application/javascript">
 
-    function saveDisease() {
-        var diseaseNameInp = $("#diseaseNameId").val();
+    function getForCast() {
+        var diseaseNameInp = $("#disease_year").val();
         jQuery.ajax ({
-            url: "/rest/disease/create",
+            url: "/rest/patient/get",
             type: "POST",
             data: JSON.stringify({ diseaseName: diseaseNameInp }),
             dataType: "json",
             contentType: "application/json; charset=utf-8"
+        }).done(function( data ) {
+            console.log(data);
+            var fx_values = [];
+            for(var  i = 0; i < data.size; i++){
+                fx_values.push()
+            }
         });
 
+
         alert("Disease " + diseaseNameInp + " successfully added!");
-        location.reload();
+//        location.reload();
     }
 </script>
 </body>

@@ -65,6 +65,8 @@
             data: JSON.stringify({ diseaseName: diseaseNameInp }),
             dataType: "json",
             contentType: "application/json; charset=utf-8"
+        }).done(function( data ) {
+
         });
 
         alert("Disease " + diseaseNameInp + " successfully added!");
