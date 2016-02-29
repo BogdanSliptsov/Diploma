@@ -1,5 +1,6 @@
 package com.diploma.rest;
 
+import com.diploma.Point;
 import com.diploma.service.DeseaseService;
 import com.diploma.service.GeneralService;
 import com.diploma.service.PatientsService;
@@ -110,17 +111,20 @@ public class PatientsREST {
         String diseaseName = inputObj.get("diseaseName").toString();
         Integer years = Integer.valueOf(inputObj.get("years").toString());
 
-        Map<Integer, Integer> map = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
+        List<Point> points = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
 
-        if (map == null) {
+        if (points == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
         }
         JSONArray returnJSON = new JSONArray();
         JSONObject patientsJSON;
+        JSONObject yearJSON;
 
-        for (Map.Entry entry : map.entrySet()) {
+        for (Point p : points) {
+            yearJSON = new JSONObject();
             patientsJSON = new JSONObject();
-            patientsJSON.put(entry.getKey(), entry.getValue());
+            yearJSON.put("year", p.getX());
+            patientsJSON.put("patients", p.getY());
             returnJSON.add(patientsJSON);
         }
         return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
@@ -138,17 +142,20 @@ public class PatientsREST {
         //TODO Change here to valid math method
         Integer years = Integer.valueOf(inputObj.get("years").toString());
 
-        Map<Integer, Integer> map = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
+        List<Point> points = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
 
-        if (map == null) {
+        if (points == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
         }
         JSONArray returnJSON = new JSONArray();
         JSONObject patientsJSON;
+        JSONObject yearJSON;
 
-        for (Map.Entry entry : map.entrySet()) {
+        for (Point p : points) {
+            yearJSON = new JSONObject();
             patientsJSON = new JSONObject();
-            patientsJSON.put(entry.getKey(), entry.getValue());
+            yearJSON.put("year", p.getX());
+            patientsJSON.put("patients", p.getY());
             returnJSON.add(patientsJSON);
         }
         return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
@@ -166,17 +173,20 @@ public class PatientsREST {
         //TODO Change here to valid math method
         Integer years = Integer.valueOf(inputObj.get("years").toString());
 
-        Map<Integer, Integer> map = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
+        List<Point> points = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
 
-        if (map == null) {
+        if (points == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
         }
         JSONArray returnJSON = new JSONArray();
         JSONObject patientsJSON;
+        JSONObject yearJSON;
 
-        for (Map.Entry entry : map.entrySet()) {
+        for (Point p : points) {
+            yearJSON = new JSONObject();
             patientsJSON = new JSONObject();
-            patientsJSON.put(entry.getKey(), entry.getValue());
+            yearJSON.put("year", p.getX());
+            patientsJSON.put("patients", p.getY());
             returnJSON.add(patientsJSON);
         }
         return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();

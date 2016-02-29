@@ -51,26 +51,32 @@ public class FourierSeries {
 
 
     // 4 in loop is max number of garmonics
-    public Double calculation(Double t, Double y) {
+//    public Double calculation(Double t, Double y) {
+    public Double calculation(Double t) {
         List<Double> sumResults = new ArrayList<Double>();
         List<Double> differenceList = new ArrayList<Double>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             double tmpResult = 0.0;
             for (int j = 1; j <= i + 1; j++) {
                 tmpResult += countAk(j, t) * Math.cos(j * t) + countBk(j, t) * Math.sin(j * t);
             }
             sumResults.add(countA0() + tmpResult);
-            differenceList.add(Math.sqrt(Math.pow(sumResults.get(i) - y, 2)));
+//            differenceList.add(Math.sqrt(Math.pow(sumResults.get(i) - y, 2)));
         }
-        return sumResults.get(differenceList.indexOf(Collections.min(differenceList)));
+//        return sumResults.get(differenceList.indexOf(Collections.min(differenceList)));
+        return sumResults.get(sumResults.size() - 1);
     }
 
     public List<Double> fourierSeriesApproximation(Double pointToApproximate) {
         List<Double> resultList = new ArrayList<Double>();
         for (int i = 0; i < N; i++) {
-            resultList.add(calculation(xValues.get(i), yValues.get(i)));
+            resultList.add(calculation(xValues.get(i)));
+//            resultList.add(calculation(xValues.get(i), yValues.get(i)));
         }
-//        resultList.add(calculation(pointToApproximate));
+
+        resultList.add(calculation(pointToApproximate));
+//        resultList.add(calculation(pointToApproximate, new ExponentialSmoothing().smooth(yValues)
+//                    .get(yValues.size())));
         return resultList;
     }
 

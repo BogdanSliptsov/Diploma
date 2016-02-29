@@ -29,4 +29,8 @@ public class ForecastService {
         forecastDAO.deleteByMethodNameForYears(methodName, diseaseId);
         return true;
     }
+
+    public List<ForecastEntity> getForecastByDiseaseIdForSmoothing(Long diseaseId) {
+        return forecastDAO.getAllForecastRecordsByDiseaseForSmoothing(diseaseId);
+    }
 }

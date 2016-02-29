@@ -72,9 +72,10 @@ public class ForecastDAO implements IDataAccessObject<ForecastEntity, Long> {
      * @param diseaseId disease id.
      * @return list of ID's.
      */
-    public List<Long> getAllForecastedYearsForDisease(Long diseaseId) {
+    public List<Long> getAllForecastedYearsForDisease(Long diseaseId, String mathMethod) {
         String query = "SELECT f.yearEntity.id FROM ForecastEntity f WHERE f.deseaseEntity.id=" + diseaseId +
-                " AND f.monthsEntity.id is NULL";
+                " AND f.methodName=\'" + mathMethod +
+                "\' AND f.monthsEntity.id is NULL";
         TypedQuery<Long> result = entityManager.createQuery(query, Long.class);
         return result.getResultList();
     }
@@ -83,11 +84,24 @@ public class ForecastDAO implements IDataAccessObject<ForecastEntity, Long> {
      * Used to get number of patients for year.
      * @return number of patients.
      */
-    public Integer getNumberOfForecastedPatientsForYearID(Long diseaseId, Long yearId) {
+    public Integer getNumberOfForecastedPatientsForYearID(Long diseaseId, Long yearId, String mathMethod) {
         String query = "SELECT p.numberOfPatients FROM ForecastEntity p WHERE p.yearEntity.id=" +
                 yearId + " AND p.deseaseEntity.id=" + diseaseId +
-                " AND p.monthsEntity.id IS NULL";
+                " AND p.methodName=\'" + mathMethod +
+                "\' AND p.monthsEntity.id IS NULL";
         TypedQuery<Integer> result = entityManager.createQuery(query, Integer.class);
         return result.getSingleResult();
+    }
+
+    /**
+     * Used to get all forecast records for disease and exp smoothing method.
+     * @param diseaseId disease id.
+     * @return list of forecast records.
+     */
+    public List<ForecastEntity> getAllForecastRecordsByDiseaseForSmoothing(Long diseaseId) {
+        String query = "SELECT f FROM ForecastEntity f WHERE f.deseaseEntity.id=" + diseaseId +
+                " AND f.methodName=\'SMOOTHING\'";
+        TypedQuery<ForecastEntity> result = entityManager.createQuery(query, ForecastEntity.class);
+        return result.getResultList();
     }
 }

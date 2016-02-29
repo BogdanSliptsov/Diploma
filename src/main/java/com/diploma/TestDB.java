@@ -1,6 +1,7 @@
 package com.diploma;
 
 import com.diploma.entity.DeseaseEntity;
+import com.diploma.entity.ForecastEntity;
 import com.diploma.entity.PatientsEntity;
 import com.diploma.service.*;
 import org.springframework.context.ApplicationContext;
@@ -64,9 +65,13 @@ public class TestDB {
 //            System.out.println(entry.getKey() + "=" + entry.getValue());
 //        }
 //
-       for (Map.Entry<Integer, Integer> entry: generalService.getAllPatientsOfDisease("OPACHA").entrySet()) {
-            System.out.println(entry.getKey() + "=" + entry.getValue());
-        }
+//       for (Map.Entry<Integer, Integer> entry: generalService.getAllPatientsOfDisease("OPACHA").entrySet()) {
+//            System.out.println(entry.getKey() + "=" + entry.getValue());
+//        }
+
+       for (Point p : generalService.getAllForecastedPatientsOfDiseaseFourier("OPA", 4)) {
+           System.out.println(p);
+       }
 
     }
 }

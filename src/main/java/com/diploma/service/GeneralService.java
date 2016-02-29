@@ -2,6 +2,7 @@ package com.diploma.service;
 
 import com.diploma.Point;
 import com.diploma.approximation.ExponentialSmoothing;
+import com.diploma.approximation.FourierTransform;
 import com.diploma.dao.*;
 import com.diploma.entity.*;
 import com.diploma.interpolation.LagrangeInterpolation;
@@ -9,10 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by boubdyk on 23.02.2016.
@@ -195,7 +193,7 @@ public class GeneralService {
      * @param diseaseName
      * @param lastYear value max = 5
      */
-    public void expSmoothForecastByYear(String diseaseName, int lastYear) {
+    public List<Point> expSmoothForecastByYear(String diseaseName, int lastYear) {
         ExponentialSmoothing exponentialSmoothing = new ExponentialSmoothing();
         List<Double> inputListForSmoothing = new ArrayList<>();
         Long diseaseId = deseaseDAO.getIdByName(diseaseName);
@@ -228,42 +226,116 @@ public class GeneralService {
 
         forecastService.deleteForYear("SMOOTHING", deseaseDAO.getIdByName(diseaseName));
 
+        List<Point> returnList = new ArrayList<>();
         //Addind years to table YEAR and gettin year IDs
         for (int i = 0; i < actualNumberOfPatients.size(); i++) {
             if (i != lastLoop) {
                 forecastDAO.create(new ForecastEntity(actualNumberOfPatients.get(i), deseaseDAO.read(diseaseId),
                         yearDAO.read(yearService.createYear(actualYearsNumbers.get(i))), "SMOOTHING"));
+                returnList.add(new Point(actualYearsNumbers.get(i) + 0.0, actualNumberOfPatients.get(i) + 0.0));
             }
         }
+        return returnList;
     }
 
     /**
-     * Used to get all forecasted patients of disease by disease name.
+     * Used to fourier transfor exponential smoothing results.
      * @param diseaseName disease name.
-     * @return map: key=year, value=numberOfPatients.
+     * @return result list.
      */
-    public Map<Integer, Integer> getAllForecastedPatientsOfDiseaseSmoothing(String diseaseName, Integer year) {
+    public List<Point> fourierTransformForExpSmoothing(String diseaseName) {
+        Long diseaseId = deseaseDAO.getIdByName(diseaseName);
+        List<ForecastEntity> forecastRecords = forecastService.getForecastByDiseaseIdForSmoothing(diseaseId);
+        List<Point> intputPoints = new ArrayList<>();
+        List<Integer> yearsList = new ArrayList<>();
+        for (ForecastEntity f : forecastRecords) {
+            intputPoints.add(new Point(f.getYearEntity().getYearNumber() + 0.0, f.getNumberOfPatients() + 0.0));
+            yearsList.add(f.getYearEntity().getYearNumber());
+        }
+
+        List<Point> resultList;
+
+        int intputPointsSize = intputPoints.size();
+
+        List<Integer> powerOfTwoList = new ArrayList<>();
+        for (int i = 1; i < 10; i++) {
+            powerOfTwoList.add((int)(long)Math.pow(2, i));
+        }
+
+        List<Integer> differenceList = new ArrayList<>();
+        for (Integer i : powerOfTwoList) {
+            differenceList.add(Math.abs(intputPointsSize - i));
+        }
+
+        Collections.min(differenceList);
+
+        //TODO
+        int k=0;
+        resultList = FourierTransform.fourierTransform(intputPoints);
+        for (int i = 0; i < resultList.size(); i++) {
+            forecastDAO.create(new ForecastEntity(resultList.get(i).getY().intValue(), deseaseDAO.read(diseaseId),
+                    yearDAO.read(yearService.createYear(yearsList.get(i + k))), "FOURIER"));
+        }
+        return resultList;
+    }
+
+    /**
+     * Used to get all forecasted patients of disease by disease name for smoothing method.
+     * @param diseaseName disease name.
+     * @return list of points: x=year, y=numbeOfPatients
+     */
+    public List<Point> getAllForecastedPatientsOfDiseaseSmoothing(String diseaseName, Integer year) {
         expSmoothForecastByYear(diseaseName, year);
         Long diseaseId = deseaseDAO.getIdByName(diseaseName);
 //        List<Integer> numberOfPatients = patientsDAO.getNumberOfPatientsByDiseaseIdForYears(diseaseId);
         List<Integer> actualNumberOfPatients = new ArrayList<>();
-        List<Long> actualYearIDs = forecastDAO.getAllForecastedYearsForDisease(diseaseId);
+        List<Long> actualYearIDs = forecastDAO.getAllForecastedYearsForDisease(diseaseId, "SMOOTHING");
         List<Integer> actualYearsNumbers = new ArrayList<>();
 
         int counterForNextLoop = 0;
         for (Long yearId : actualYearIDs) {
             actualYearsNumbers.add(yearDAO.getYearNumberByYearId(yearId));
-            actualNumberOfPatients.add(forecastDAO.getNumberOfForecastedPatientsForYearID(diseaseId, yearId));
+            actualNumberOfPatients.add(forecastDAO.getNumberOfForecastedPatientsForYearID(diseaseId, yearId, "SMOOTHING"));
             counterForNextLoop++;
         }
 
-        Map<Integer, Integer> map = new HashMap<>();
+        List<Point> resultList = new ArrayList<>();
 
         for (int i = 0; i < counterForNextLoop; i++) {
-            map.put(actualYearsNumbers.get(i), actualNumberOfPatients.get(i));
+            resultList.add(new Point(actualYearsNumbers.get(i) + 0.0, actualNumberOfPatients.get(i) + 0.0));
         }
 
-        return map;
+        return resultList;
+    }
+
+    /**
+     * Used to get all forecasted patients of disease by disease name for fourier transform.
+     * @param diseaseName disease name.
+     * @return list of points: x=year, y=numbeOfPatients
+     */
+    public List<Point> getAllForecastedPatientsOfDiseaseFourier(String diseaseName, Integer year) {
+        expSmoothForecastByYear(diseaseName, year);
+        fourierTransformForExpSmoothing(diseaseName);
+        Long diseaseId = deseaseDAO.getIdByName(diseaseName);
+//        List<Integer> numberOfPatients = patientsDAO.getNumberOfPatientsByDiseaseIdForYears(diseaseId);
+        List<Integer> actualNumberOfPatients = new ArrayList<>();
+        List<Long> actualYearIDs = forecastDAO.getAllForecastedYearsForDisease(diseaseId, "FOURIER");
+        List<Integer> actualYearsNumbers = new ArrayList<>();
+
+        int counterForNextLoop = 0;
+        for (Long yearId : actualYearIDs) {
+            actualYearsNumbers.add(yearDAO.getYearNumberByYearId(yearId));
+            actualNumberOfPatients.add(forecastDAO.getNumberOfForecastedPatientsForYearID(diseaseId, yearId, "FOURIER"));
+            counterForNextLoop++;
+        }
+
+        List<Point> resultList = new ArrayList<>();
+
+        for (int i = 0; i < counterForNextLoop; i++) {
+            resultList.add(new Point(actualYearsNumbers.get(i) + 0.0, actualNumberOfPatients.get(i) + 0.0));
+        }
+
+        return resultList;
     }
 
 }

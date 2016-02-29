@@ -136,7 +136,6 @@
             <version>3.0.5.RELEASE</version>
         </dependency>
 
-
         <!-- JSR-330 -->
         <dependency>
             <groupId>javax.inject</groupId>
@@ -182,6 +181,35 @@
             <artifactId>jsp-api</artifactId>
             <version>2.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>5.3</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>javax.servlet</groupId>-->
+            <!--<artifactId>jsp-api</artifactId>-->
+            <!--<version>2.0.public_draft</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>

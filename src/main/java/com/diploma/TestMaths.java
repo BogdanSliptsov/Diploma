@@ -5,6 +5,10 @@ import com.diploma.approximation.ExponentialSmoothing;
 import com.diploma.approximation.FourierSeries;
 import com.diploma.approximation.PolynomialApproximation;
 import com.diploma.interpolation.LagrangeInterpolation;
+import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.transform.DftNormalization;
+import org.apache.commons.math3.transform.FastFourierTransformer;
+import org.apache.commons.math3.transform.TransformType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +48,17 @@ public class TestMaths {
     }
 
     public static void testFourierSeries(List<Point> points) {
-        for (Double d: new FourierSeries(points).fourierSeriesApproximation(4.0)) {
+        FourierSeries fourierSeries = new FourierSeries(points);
+
+        for (Double d: fourierSeries.fourierSeriesApproximation(4.0)) {
+            System.out.println(d);
+        }
+        System.out.println();
+        for (Double d: fourierSeries.fourierSeriesApproximation(5.0)) {
+            System.out.println(d);
+        }
+        System.out.println();
+        for (Double d: fourierSeries.fourierSeriesApproximation(6.0)) {
             System.out.println(d);
         }
     }
@@ -62,12 +76,26 @@ public class TestMaths {
         points.add(new Point(-1.0, -0.8));
         points.add(new Point(0.0, 1.6));
         points.add(new Point(1.0, 2.3));
-        points.add(new Point(3.0, 1.5));
+//        points.add(new Point(3.0, 1.5));
 
 //        testPolynomialApproximation(points);
 //        testEponentialSmoothing(points);
         testFourierSeries(points);
 //        testLagrangeInterpolation(points);
+//        fourierTransform(points);
+    }
+
+    public static void fourierTransform(List<Point> points) {
+        FastFourierTransformer transformer = new FastFourierTransformer(DftNormalization.STANDARD);
+        double[] f = new double[points.size()];
+        for (int i = 0; i < points.size(); i++) {
+            f[i] = points.get(i).getY();
+        }
+
+        for (Complex c : transformer.transform(f, TransformType.FORWARD)) {
+            System.out.println(c.getImaginary());
+        }
+
     }
 
 }
