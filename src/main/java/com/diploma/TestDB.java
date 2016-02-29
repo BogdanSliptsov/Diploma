@@ -37,6 +37,8 @@ public class TestDB {
 //        generalService.fillDataByYear("OPA", 2013, 2983);
 //        generalService.fillDataByYear("OPA", 2014, 2481);
 //        generalService.fillDataByYear("OPA", 2016, 2198);
+
+        generalService.fillDataByYear("OPACHA", 2016, 2198);
 //
 //
 //        for (Integer l : generalService.restoreDataForYears("OPA")) {
@@ -52,13 +54,17 @@ public class TestDB {
 
 //        System.out.println(forecastService.deleteForYear("asd", 10L));
 
-        // TODO
-        generalService.expSmoothForecastByYear("OPA", 3);
+//         TODO
+//        generalService.expSmoothForecastByYear("OPA", 3);
 
 //        forecastService.deleteForYear("SMOOTHING", 7L);
 
 
-        for (Map.Entry<Integer, Integer> entry: generalService.getAllForecastedPatientsOfDiseaseSmoothing("OPA").entrySet()) {
+//        for (Map.Entry<Integer, Integer> entry: generalService.getAllForecastedPatientsOfDiseaseSmoothing("OPA").entrySet()) {
+//            System.out.println(entry.getKey() + "=" + entry.getValue());
+//        }
+//
+       for (Map.Entry<Integer, Integer> entry: generalService.getAllPatientsOfDisease("OPACHA").entrySet()) {
             System.out.println(entry.getKey() + "=" + entry.getValue());
         }
 

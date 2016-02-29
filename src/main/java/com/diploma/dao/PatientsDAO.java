@@ -48,7 +48,7 @@ public class PatientsDAO implements IDataAccessObject<PatientsEntity, Long> {
      * @return
      */
     public List<PatientsEntity> getByDeseaseID(Long deseaseID) {
-        String query = "SELECT p FROM PatientsEntity p WHERE p.diseaseId=\'" + deseaseID + "\'";
+        String query = "SELECT p FROM PatientsEntity p WHERE p.deseaseEntity.id=\'" + deseaseID + "\'";
         TypedQuery<PatientsEntity> result = entityManager.createQuery(query, PatientsEntity.class);
         return result.getResultList();
     }

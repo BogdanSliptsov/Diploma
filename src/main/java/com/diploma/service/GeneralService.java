@@ -101,9 +101,17 @@ public class GeneralService {
      */
     public Long fillDataByYear(String diseaseName, Integer year, Integer numberOfPatients) {
         Long diseaseId = deseaseDAO.getIdByName(diseaseName);
-//        YearEntity yearEntity = new YearEntity(year);
-//        Long yearId = yearDAO.create(yearEntity);
         Long yearId = yearService.createYear(year);
+
+        List<PatientsEntity> actualPatients = patientsDAO.getByDeseaseID(diseaseId);
+        PatientsEntity patientToUpdate;
+        for (PatientsEntity p : actualPatients) {
+            if (p.getYearEntity().getId().equals(yearId)) {
+                patientToUpdate = p;
+                patientToUpdate.setNumberOfPatients(numberOfPatients);
+                return patientsDAO.update(patientToUpdate).getId();
+            }
+        }
 
         PatientsEntity patientsEntity = new PatientsEntity(numberOfPatients, yearDAO.read(yearId), deseaseDAO.read(diseaseId));
         return patientsDAO.create(patientsEntity);
