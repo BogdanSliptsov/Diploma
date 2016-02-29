@@ -1,6 +1,7 @@
 package com.diploma.rest;
 
 import com.diploma.Point;
+import com.diploma.entity.DeseaseEntity;
 import com.diploma.service.DeseaseService;
 import com.diploma.service.GeneralService;
 import com.diploma.service.PatientsService;
@@ -184,33 +185,73 @@ public class PatientsREST {
 //    }
 
     @POST
-    @Path("/forecast/polinom")
+    @Path("/remove/patient")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public final Response getForecastedPatientsPolinom(final String input) throws ParseException {
+    public final Response removePatientsRecord(final String input) throws ParseException {
         JSONObject inputObj = (JSONObject) new JSONParser().parse(input);
 
         String diseaseName = inputObj.get("diseaseName").toString();
 
-        //TODO Change here to valid math method
-        Integer years = Integer.valueOf(inputObj.get("years").toString());
+        Long yearNumber = Long.valueOf(inputObj.get("yearNumber").toString());
 
-        List<Point> points = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
+        generalService.deletePatientRecord(diseaseName, yearNumber);
+
+        List<Point> points = generalService.getAllPatientsOfDisease(diseaseName);
+
+        Collections.sort(points, new Comparator<Point>() {
+            @Override
+            public int compare(Point o1, Point o2) {
+                if (o1.getX() > o2.getX()) return 1;
+                if (o1.getX() < o2.getX()) return -1;
+                return 0;
+            }
+        });
 
         if (points == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
         }
-        JSONArray returnJSON = new JSONArray();
-        JSONObject patientsJSON;
-        JSONObject yearJSON;
 
-        for (Point p : points) {
-            yearJSON = new JSONObject();
-            patientsJSON = new JSONObject();
-            yearJSON.put("year", p.getX());
-            patientsJSON.put("patients", p.getY());
-            returnJSON.add(patientsJSON);
+        JSONObject returnObject = new JSONObject();
+        JSONObject jsonObject;
+        JSONArray jsonArray = new JSONArray();
+        for (Point p: points) {
+            jsonObject = new JSONObject();
+            jsonObject.put("year", p.getX());
+            jsonObject.put("numberOfPatients", p.getY());
+            jsonArray.add(jsonObject);
         }
-        return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
+        returnObject.put("ResultList", jsonArray);
+        return Response.status(Constants.CODE_CREATED).entity(returnObject.toJSONString()).build();
+    }
+
+    @POST
+    @Path("/remove/disease")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public final Response removeDiseaseRecord(final String input) throws ParseException {
+        JSONObject inputObj = (JSONObject) new JSONParser().parse(input);
+
+        String diseaseName = inputObj.get("diseaseName").toString();
+
+        generalService.deleteDiseaseByName(diseaseName);
+
+        List<DeseaseEntity> diseases = deseaseService.getAllDeseases();
+
+
+        if (diseases == null) {
+            return Response.status(Constants.CODE_NOT_MODIFIED).build();
+        }
+
+        JSONObject returnObject = new JSONObject();
+        JSONObject jsonObject;
+        JSONArray jsonArray = new JSONArray();
+        for (DeseaseEntity d: diseases) {
+            jsonObject = new JSONObject();
+            jsonObject.put("diseaseName", d.getName());
+            jsonArray.add(jsonObject);
+        }
+        returnObject.put("ResultList", jsonArray);
+        return Response.status(Constants.CODE_CREATED).entity(returnObject.toJSONString()).build();
     }
 }
