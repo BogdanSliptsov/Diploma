@@ -84,6 +84,7 @@ public class PatientsREST {
             yearJSON.put("year", p.getX());
             patientsJSON.put("patients", p.getY());
             returnJSON.add(patientsJSON);
+            returnJSON.add(yearJSON);
         }
         return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
     }
@@ -129,6 +130,7 @@ public class PatientsREST {
             yearJSON.put("year", p.getX());
             patientsJSON.put("patients", p.getY());
             returnJSON.add(patientsJSON);
+            returnJSON.add(yearJSON);
         }
         return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
     }
