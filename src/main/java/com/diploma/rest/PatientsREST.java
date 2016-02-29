@@ -18,6 +18,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -71,6 +73,15 @@ public class PatientsREST {
 
         List<Point> points = generalService.getAllPatientsOfDisease(diseaseName);
 
+        Collections.sort(points, new Comparator<Point>() {
+            @Override
+            public int compare(Point o1, Point o2) {
+                if (o1.getX() > o2.getX()) return 1;
+                if (o1.getX() < o2.getX()) return -1;
+                return 0;
+            }
+        });
+
         if (points == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
         }
@@ -115,6 +126,15 @@ public class PatientsREST {
         Integer years = Integer.valueOf(inputObj.get("years").toString());
 
         List<Point> points = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
+
+        Collections.sort(points, new Comparator<Point>() {
+            @Override
+            public int compare(Point o1, Point o2) {
+                if (o1.getX() > o2.getX()) return 1;
+                if (o1.getX() < o2.getX()) return -1;
+                return 0;
+            }
+        });
 
         if (points == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
