@@ -165,7 +165,7 @@ public class GeneralService {
      * @param diseaseName disease name.
      * @return map: key=year, value=numberOfPatients.
      */
-    public Map<Integer, Integer> getAllPatientsOfDisease(String diseaseName) {
+    public List<Point> getAllPatientsOfDisease(String diseaseName) {
         Long diseaseId = deseaseDAO.getIdByName(diseaseName);
 //        List<Integer> numberOfPatients = patientsDAO.getNumberOfPatientsByDiseaseIdForYears(diseaseId);
         List<Integer> actualNumberOfPatients = new ArrayList<>();
@@ -179,13 +179,13 @@ public class GeneralService {
             counterForNextLoop++;
         }
 
-        Map<Integer, Integer> map = new HashMap<>();
+        List<Point> points = new ArrayList<>();
 
         for (int i = 0; i < counterForNextLoop; i++) {
-            map.put(actualYearsNumbers.get(i), actualNumberOfPatients.get(i));
+            points.add(new Point(actualYearsNumbers.get(i) + 0.0, actualNumberOfPatients.get(i) + 0.0));
         }
 
-        return map;
+        return points;
     }
 
     /**
@@ -262,19 +262,41 @@ public class GeneralService {
             powerOfTwoList.add((int)(long)Math.pow(2, i));
         }
 
-        List<Integer> differenceList = new ArrayList<>();
-        for (Integer i : powerOfTwoList) {
-            differenceList.add(Math.abs(intputPointsSize - i));
+        int counter = 0;
+        while (intputPointsSize - powerOfTwoList.get(counter) >= 0) {
+            counter++;
         }
 
-        Collections.min(differenceList);
+        int k1 = intputPointsSize - powerOfTwoList.get(counter - 1);
+
+        int k = k1;
+        while (k1 > 0) {
+            yearsList.remove(k1);
+            intputPoints.remove(k1);
+            k1--;
+        }
+
+
+//        List<Integer> newYearsList = new ArrayList<>();
+//        List<Point> newInputPointsList = new ArrayList<>();
+//        for (int i = 0; i < intputPoints.size() - k; i++) {
+//            newYearsList.add(yearsList.get(i + k));
+//            newInputPointsList.add(intputPoints.get(i + k));
+//        }
 
         //TODO
-        int k=0;
         resultList = FourierTransform.fourierTransform(intputPoints);
-        for (int i = 0; i < resultList.size(); i++) {
-            forecastDAO.create(new ForecastEntity(resultList.get(i).getY().intValue(), deseaseDAO.read(diseaseId),
-                    yearDAO.read(yearService.createYear(yearsList.get(i + k))), "FOURIER"));
+//        resultList = FourierTransform.fourierTransform(newInputPointsList);
+//        for (int i = 0; i < resultList.size(); i++) {
+//            forecastDAO.create(new ForecastEntity(resultList.get(i).getY().intValue(), deseaseDAO.read(diseaseId),
+////                    yearDAO.read(yearService.createYear(yearsList.get(i + k))), "FOURIER"));
+////                    yearDAO.read(yearService.createYear(yearsList.get(i))), "FOURIER"));
+//                    yearDAO.read(yearService.createYear(newYearsList.get(i))), "FOURIER"));
+//        }
+
+        List<Point> newPointList = new ArrayList<>();
+        for (Point p : resultList) {
+            System.out.println(p);
         }
         return resultList;
     }

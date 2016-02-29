@@ -69,17 +69,20 @@ public class PatientsREST {
 
         String diseaseName = inputObj.get("diseaseName").toString();
 
-        Map<Integer, Integer> map = generalService.getAllPatientsOfDisease(diseaseName);
+        List<Point> points = generalService.getAllPatientsOfDisease(diseaseName);
 
-        if (map == null) {
+        if (points == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
         }
         JSONArray returnJSON = new JSONArray();
         JSONObject patientsJSON;
+        JSONObject yearJSON;
 
-        for (Map.Entry entry : map.entrySet()) {
+        for (Point p : points) {
+            yearJSON = new JSONObject();
             patientsJSON = new JSONObject();
-            patientsJSON.put(entry.getKey(), entry.getValue());
+            yearJSON.put("year", p.getX());
+            patientsJSON.put("patients", p.getY());
             returnJSON.add(patientsJSON);
         }
         return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
@@ -130,36 +133,36 @@ public class PatientsREST {
         return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
     }
 
-    @POST
-    @Path("/forecast/fourier")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public final Response getForecastedPatientsFourierSeries(final String input) throws ParseException {
-        JSONObject inputObj = (JSONObject) new JSONParser().parse(input);
-
-        String diseaseName = inputObj.get("diseaseName").toString();
-
-        //TODO Change here to valid math method
-        Integer years = Integer.valueOf(inputObj.get("years").toString());
-
-        List<Point> points = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
-
-        if (points == null) {
-            return Response.status(Constants.CODE_NOT_MODIFIED).build();
-        }
-        JSONArray returnJSON = new JSONArray();
-        JSONObject patientsJSON;
-        JSONObject yearJSON;
-
-        for (Point p : points) {
-            yearJSON = new JSONObject();
-            patientsJSON = new JSONObject();
-            yearJSON.put("year", p.getX());
-            patientsJSON.put("patients", p.getY());
-            returnJSON.add(patientsJSON);
-        }
-        return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
-    }
+//    @POST
+//    @Path("/forecast/fourier")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public final Response getForecastedPatientsFourierSeries(final String input) throws ParseException {
+//        JSONObject inputObj = (JSONObject) new JSONParser().parse(input);
+//
+//        String diseaseName = inputObj.get("diseaseName").toString();
+//
+//        //TODO Change here to valid math method
+//        Integer years = Integer.valueOf(inputObj.get("years").toString());
+//
+//        List<Point> points = generalService.getAllForecastedPatientsOfDiseaseSmoothing(diseaseName, years);
+//
+//        if (points == null) {
+//            return Response.status(Constants.CODE_NOT_MODIFIED).build();
+//        }
+//        JSONArray returnJSON = new JSONArray();
+//        JSONObject patientsJSON;
+//        JSONObject yearJSON;
+//
+//        for (Point p : points) {
+//            yearJSON = new JSONObject();
+//            patientsJSON = new JSONObject();
+//            yearJSON.put("year", p.getX());
+//            patientsJSON.put("patients", p.getY());
+//            returnJSON.add(patientsJSON);
+//        }
+//        return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
+//    }
 
     @POST
     @Path("/forecast/polinom")
