@@ -53,12 +53,11 @@
         </tbody>
     </table>
 
+    <div id="fx_values_graph" class="demo-placeholder"></div>
+
 
 </div>
 
-<div class="container">
-
-</div>
 
 <jsp:include page="common/js.jsp"/>
 <script type="application/javascript">
@@ -74,9 +73,14 @@
         }).done(function( data ) {
             console.log(data);
             var fx_values = [];
-            for(var  i = 0; i < data.size; i++){
-                fx_values.push()
+            for(var i = 0; i < data.ResultList.length; i++){
+                fx_values.push([data.ResultList[i].year, data.ResultList[i].numberOfPatients]);
             }
+
+            $.plot("#fx_values_graph", [
+                { label: "Restoration", data: fx_values, points: {show: true}, lines: {show: true} },
+
+            ]);
         });
 
 
