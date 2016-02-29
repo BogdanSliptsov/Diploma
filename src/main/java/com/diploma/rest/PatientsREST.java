@@ -74,19 +74,18 @@ public class PatientsREST {
         if (points == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
         }
-        JSONArray returnJSON = new JSONArray();
-        JSONObject patientsJSON;
-        JSONObject yearJSON;
 
-        for (Point p : points) {
-            yearJSON = new JSONObject();
-            patientsJSON = new JSONObject();
-            yearJSON.put("year", p.getX());
-            patientsJSON.put("patients", p.getY());
-            returnJSON.add(patientsJSON);
-            returnJSON.add(yearJSON);
+        JSONObject returnObject = new JSONObject();
+        JSONObject jsonObject;
+        JSONArray jsonArray = new JSONArray();
+        for (Point p: points) {
+            jsonObject = new JSONObject();
+            jsonObject.put("year", p.getX());
+            jsonObject.put("numberOfPatients", p.getY());
+            jsonArray.add(jsonObject);
         }
-        return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
+        returnObject.put("ResultList", jsonArray);
+        return Response.status(Constants.CODE_CREATED).entity(returnObject.toJSONString()).build();
     }
 
     @POST
@@ -120,19 +119,17 @@ public class PatientsREST {
         if (points == null) {
             return Response.status(Constants.CODE_NOT_MODIFIED).build();
         }
-        JSONArray returnJSON = new JSONArray();
-        JSONObject patientsJSON;
-        JSONObject yearJSON;
-
-        for (Point p : points) {
-            yearJSON = new JSONObject();
-            patientsJSON = new JSONObject();
-            yearJSON.put("year", p.getX());
-            patientsJSON.put("patients", p.getY());
-            returnJSON.add(patientsJSON);
-            returnJSON.add(yearJSON);
+        JSONObject returnObject = new JSONObject();
+        JSONObject jsonObject;
+        JSONArray jsonArray = new JSONArray();
+        for (Point p: points) {
+            jsonObject = new JSONObject();
+            jsonObject.put("year", p.getX());
+            jsonObject.put("numberOfPatients", p.getY());
+            jsonArray.add(jsonObject);
         }
-        return Response.status(Constants.CODE_CREATED).entity(returnJSON.toJSONString()).build();
+        returnObject.put("ResultList", jsonArray);
+        return Response.status(Constants.CODE_CREATED).entity(returnObject.toJSONString()).build();
     }
 
 //    @POST
