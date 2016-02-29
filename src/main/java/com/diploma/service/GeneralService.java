@@ -360,4 +360,23 @@ public class GeneralService {
         return resultList;
     }
 
+    /**
+     * Used to delete disease from DB.
+     * @param diseaseName disease name.
+     */
+    public void deleteDiseaseByName(String diseaseName) {
+        Long diseaseId = deseaseDAO.getIdByName(diseaseName);
+        deseaseDAO.delete(diseaseId);
+    }
+
+    /**
+     * Used to delete patient record from DB.
+     * @param diseaseName disease name.
+     * @param yearNumber year number.
+     */
+    public void deletePatientRecord(String diseaseName, Long yearNumber) {
+        Long recordID = patientsDAO.getPatientsByDiseaseNameAndYearId(deseaseDAO.getIdByName(diseaseName), yearNumber);
+        patientsDAO.delete(recordID);
+    }
+
 }

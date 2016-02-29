@@ -109,4 +109,18 @@ public class PatientsDAO implements IDataAccessObject<PatientsEntity, Long> {
         TypedQuery<Integer> result = entityManager.createQuery(query, Integer.class);
         return result.getResultList();
     }
+
+    /**
+     * Used to
+     * @param diseaseId
+     * @param yearId
+     * @return
+     */
+    public Long getPatientsByDiseaseNameAndYearId(Long diseaseId, Long yearId) {
+        String query = "SELECT p.id FROM PatientsEntity p WHERE p.yearEntity.id=" +
+                yearId + " AND p.deseaseEntity.id=" + diseaseId +
+                " AND p.monthsEntity.id IS NULL";
+        TypedQuery<Long> result = entityManager.createQuery(query, Long.class);
+        return result.getSingleResult();
+    }
 }
