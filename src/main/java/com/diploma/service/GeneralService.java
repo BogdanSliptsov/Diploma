@@ -367,6 +367,7 @@ public class GeneralService {
     public void deleteDiseaseByName(String diseaseName) {
         Long diseaseId = deseaseDAO.getIdByName(diseaseName);
         deseaseDAO.delete(diseaseId);
+        ;
     }
 
     /**
@@ -375,8 +376,14 @@ public class GeneralService {
      * @param yearNumber year number.
      */
     public void deletePatientRecord(String diseaseName, Long yearNumber) {
-        Long recordID = patientsDAO.getPatientsByDiseaseNameAndYearId(deseaseDAO.getIdByName(diseaseName), yearNumber);
-        patientsDAO.delete(recordID);
+        try {
+            Long yearId = yearService.createYear(yearNumber.intValue());
+            Long recordID = patientsDAO.getPatientsByDiseaseNameAndYearId(deseaseDAO.getIdByName(diseaseName), yearId);
+            patientsDAO.delete(recordID);
+        } catch (javax.persistence.NoResultException nre) {
+            /*NOP*/
+        }
+
     }
 
 }
