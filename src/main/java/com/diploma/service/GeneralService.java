@@ -365,9 +365,11 @@ public class GeneralService {
      * @param diseaseName disease name.
      */
     public void deleteDiseaseByName(String diseaseName) {
+
         Long diseaseId = deseaseDAO.getIdByName(diseaseName);
+        patientsDAO.deletePatientsByDiseaseId(diseaseId);
+        forecastDAO.deleteByDiseaseId(diseaseId);
         deseaseDAO.delete(diseaseId);
-        ;
     }
 
     /**
