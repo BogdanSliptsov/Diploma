@@ -30,10 +30,14 @@
         </select>
         <hr/>
         <input id="user_year" style="width: 100px" type="text" class="form-control" placeholder="Year">
+        <hr>
+        <input id="remove_year" style="width: 140px" type="text" class="form-control" placeholder="Year to delete">
         <hr/>
         <button type="button" class="btn btn-default" onclick="getForCast(); return false;">Show info</button>
         <button type="button" class="btn btn-default" onclick="restoreData(); return false;">Resore data</button>
         <button type="button" class="btn btn-default" onclick="forecast(); return false;">Forecast</button>
+        <button type="button" class="btn btn-default" onclick="removeDisease(); return false;">Remove disease</button>
+        <button type="button" class="btn btn-default" onclick="removePatientsRecord(); return false;">Remove record</button>
     </form>
 
     <hr/>
@@ -128,6 +132,77 @@
             url: "/rest/patient/forecast/smoothing",
             type: "POST",
             data: JSON.stringify({diseaseName: diseaseNameInp, years: userYear}),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8"
+        }).done(function (data) {
+            console.log(data);
+            var fx_values = [];
+            for (var i = 0; i < data.ResultList.length; i++) {
+                fx_values.push([data.ResultList[i].year, data.ResultList[i].numberOfPatients]);
+            }
+            set_fx_values_table(fx_values, 'table_data')
+            $.plot("#fx_values_graph", [
+                {label: "Restoration", data: fx_values, points: {show: true}, lines: {show: true}},
+
+            ]);
+        });
+
+        function set_fx_values_table(fx_values, html_id) {
+            var html = '<thead><tr><th>Years</th><th>Pations</th></tr></thead><tbody>';
+            for (var i = 0; i < fx_values.length; i++) {
+                html += '<tr><td>' + fx_values[i][0] + '</td><td>' + fx_values[i][1] + '</td></tr>';
+            }
+            html += '</tbody>';
+            document.getElementById(html_id).innerHTML = html;
+        }
+
+        alert("Disease " + diseaseNameInp + " successfully added!");
+//        location.reload();
+    }
+
+    function removeDisease() {
+        var diseaseNameInp = $("#disease_year").val();
+        jQuery.ajax({
+            url: "/rest/patient/remove/disease",
+            type: "POST",
+            data: JSON.stringify({diseaseName: diseaseNameInp}),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8"
+        }).done(function (data) {
+            console.log(data);
+            var fx_values = [];
+            for (var i = 0; i < data.ResultList.length; i++) {
+                fx_values.push([data.ResultList[i].year, data.ResultList[i].numberOfPatients]);
+            }
+            set_fx_values_table(fx_values, 'table_data')
+            $.plot("#fx_values_graph", [
+                {label: "Restoration", data: fx_values, points: {show: true}, lines: {show: true}},
+
+            ]);
+        });
+
+        function set_fx_values_table(fx_values, html_id) {
+            var html = '<thead><tr><th>Years</th><th>Pations</th></tr></thead><tbody>';
+            for (var i = 0; i < fx_values.length; i++) {
+                html += '<tr><td>' + fx_values[i][0] + '</td><td>' + fx_values[i][1] + '</td></tr>';
+            }
+            html += '</tbody>';
+            document.getElementById(html_id).innerHTML = html;
+        }
+
+        alert("Disease " + diseaseNameInp + " successfully added!");
+//        location.reload();
+    }
+
+    function removePatientsRecord() {
+        var diseaseNameInp = $("#disease_year").val();
+        var yearNumberInp = $("#remove_year").val();
+        console.log(yearNumberInp);
+
+        jQuery.ajax({
+            url: "/rest/patient/remove/patient",
+            type: "POST",
+            data: JSON.stringify({diseaseName: diseaseNameInp, yearNumber: yearNumberInp}),
             dataType: "json",
             contentType: "application/json; charset=utf-8"
         }).done(function (data) {
