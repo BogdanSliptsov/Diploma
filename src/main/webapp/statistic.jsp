@@ -20,7 +20,6 @@
 
     <div class="btn-group" role="group" aria-label="by">
         <button onclick="showByYear();" type="button" class="btn btn-default">By years</button>
-        <button onclick="showByMonth()" type="button" class="btn btn-default">By months</button>
     </div>
     <hr/>
     <div id="year-div" style="display: none;">
