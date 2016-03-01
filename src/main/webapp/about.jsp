@@ -21,32 +21,33 @@
 <body>
 <div align="center"></div>
 <div class="container jumbotron contact-jumbotron" align="center">
-    <table class="table-bordered">
-        <tr>
-            <th colspan="2"><h4 align="center">This service is used to get forecast for different diseases.</h4></th>
-        </tr>
-        <tr>
-            <td><b>Short summary:</b></td>
-        </tr>
-        <tr>
-            <td>
-                <i>1.</i>Add disease if it doesn't exist. <br>
-                <i>2.</i> Add data for your disease or modify actual data. <br>
-                <i>3.</i> Restore absent values.<br>
-                <i>4.</i> Build forecast.<br>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Forecast data contains of forecast table and forecast chart.
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Service might be used by doctors of different spicialities.
-            </td>
-        </tr>
-    </table>
+        <table class="table-bordered jumbotron newsContainer">
+            <tr>
+                <th colspan="2"><h4 align="center">This service is used to get forecast for different diseases.</h4>
+                </th>
+            </tr>
+            <tr>
+                <td><b>Short summary:</b></td>
+            </tr>
+            <tr>
+                <td>
+                    1. Add disease if it doesn't exist. <br>
+                    2. Add data for your disease or modify actual data. <br>
+                    3. Restore absent values.<br>
+                    4. Build forecast.<br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Forecast data contains of forecast table and forecast chart.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Service might be used by doctors of different spicialities.
+                </td>
+            </tr>
+        </table>
 
 </div>
 </body>

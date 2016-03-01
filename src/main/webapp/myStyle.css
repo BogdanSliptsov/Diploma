@@ -2,3 +2,9 @@
     width: 10px;
     line-height: 9px;
 }
+
+.newsContainer{
+    width: 850px;
+    background-color: #0f0f0f;
+    text-align: left;
+}
