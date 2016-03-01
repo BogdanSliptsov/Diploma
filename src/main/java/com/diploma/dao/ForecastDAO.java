@@ -68,6 +68,16 @@ public class ForecastDAO implements IDataAccessObject<ForecastEntity, Long> {
     }
 
     /**
+     * Used to delete record for disease by math method name.
+     * @param diseaseId disease id.
+     */
+    public void deleteByDiseaseId(Long diseaseId) {
+        Query query = entityManager.createNativeQuery("DELETE FROM forecast WHERE id_desease=" + diseaseId
+                + " AND id_month IS NULL ");
+        query.executeUpdate();
+    }
+
+    /**
      * Used to get all forecasted years ID's for current disease.
      * @param diseaseId disease id.
      * @return list of ID's.
