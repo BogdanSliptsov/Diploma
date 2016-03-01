@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -122,5 +123,15 @@ public class PatientsDAO implements IDataAccessObject<PatientsEntity, Long> {
                 " AND p.monthsEntity.id IS NULL";
         TypedQuery<Long> result = entityManager.createQuery(query, Long.class);
         return result.getSingleResult();
+    }
+
+    /**
+     * Used to delete all patients of disease.
+     * @param diseaseId disease id.
+     */
+    public void deletePatientsByDiseaseId(Long diseaseId) {
+        Query query = entityManager.createNativeQuery("DELETE FROM patients WHERE id_desease=" + diseaseId
+                + " AND id_month IS NULL ");
+        query.executeUpdate();
     }
 }
