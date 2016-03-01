@@ -28,7 +28,7 @@
         <tr>
             <td rowspan="2"><img class="img-thumbnail"
                                  src="common/mX1xPm8JjCk.jpg"
-                                 style="height: 150px">
+                                 style="height: 350px">
 
             </td><td>Name: <i>Bogdan</i></td>
         </tr>
@@ -38,6 +38,7 @@
     </table>
 
 </div>
+<jsp:include page="common/js.jsp"/>
 
 </body>
 </html>

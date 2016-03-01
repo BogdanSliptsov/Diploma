@@ -86,8 +86,6 @@
             document.getElementById(html_id).innerHTML = html;
         }
 
-        alert("Disease " + diseaseNameInp + " successfully added!");
-//        location.reload();
     }
 
     function restoreData() {
@@ -120,8 +118,7 @@
             document.getElementById(html_id).innerHTML = html;
         }
 
-        alert("Disease " + diseaseNameInp + " successfully added!");
-//        location.reload();
+        location.reload();
     }
 
     function forecast() {
@@ -156,8 +153,6 @@
             document.getElementById(html_id).innerHTML = html;
         }
 
-        alert("Disease " + diseaseNameInp + " successfully added!");
-//        location.reload();
     }
 
     function removeDisease() {
@@ -190,8 +185,7 @@
             document.getElementById(html_id).innerHTML = html;
         }
 
-        alert("Disease " + diseaseNameInp + " successfully added!");
-//        location.reload();
+        location.reload();
     }
 
     function removePatientsRecord() {
@@ -227,7 +221,6 @@
             document.getElementById(html_id).innerHTML = html;
         }
 
-        alert("Disease " + diseaseNameInp + " successfully added!");
 //        location.reload();
     }
 </script>

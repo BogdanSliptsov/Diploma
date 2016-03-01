@@ -48,7 +48,7 @@
                 </td>
             </tr>
         </table>
-
+<jsp:include page="common/js.jsp"/>
 </div>
 </body>
 </html>
